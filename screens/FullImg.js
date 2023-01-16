@@ -1,9 +1,23 @@
-import { Text } from "react-native";
+import { Text, Image, View, StyleSheet } from "react-native";
 
-function FullImg() {
+function FullImg({ route }) {
+  const { item } = route.params;
   return (
-    <Text>FullImg</Text>
+    <View>
+      <Image style={styles.item} source={{ uri: item.img }} />
+      <Text>Photographer: {item.author}</Text>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  item: {
+    width: "auto",
+    height: "90%",
+    margin: 10,
+    adjustContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default FullImg;

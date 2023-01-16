@@ -5,16 +5,14 @@ import axios from "axios";
 
 import { UNSPLASH_URL } from "@env";
 
-function Home() {
+function Home({ navigation }) {
   const [data, setData] = useState([])
-  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     fetchRandomImage();
   }, []);
 
   const updateData = () => {
-    setIsFetching(true);
     fetchRandomImage();
   };
 
@@ -24,22 +22,23 @@ function Home() {
       const newData = response.data.map((item) => {
         return {
           id: item.id,
-          img: item.urls.small,
+          img: item.urls.regular,
           author: item.user.name,
         };
       });
       setData([...data, ...newData]);
-      setIsFetching(false);
     } catch (error) {
       console.log(error);
     }
   };
+
+
   
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <Pressable><Image style={styles.item} source={{ uri: item.img }} /></Pressable>}
+        renderItem={({ item }) => <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}><Image style={styles.item} source={{ uri: item.img }} /></Pressable>}
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
