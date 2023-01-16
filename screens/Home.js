@@ -1,48 +1,66 @@
-import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, Pressable, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ExpoFastImage from 'expo-fast-image';
+import axios from "axios";
 
-/*
-Steps:
-1. fetch random image from unsplash
-2. add image to DATA array
-3. render image in FlatList
-*/
+import { UNSPLASH_URL } from "@env";
 
-const DATA = [
-  {
-    id: "3WXAJndXvCY",
-    img: "https://images.unsplash.com/photo-1672073313545-751c5c93891d?ixid=MnwzOTk0NzZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NzM4MzM5NTA&ixlib=rb-4.0.3",
-    author: "Khaled Ali",
-  }
-]
 function Home() {
-  const renderItem = ({ id, img }) => (
-    <Pressable>
-      <ExpoFastImage
-        uri={img}
-        cachekey={id}
-        style={styles.item}
-        />
-    </Pressable>
-  );
+  const [data, setData] = useState([])
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    fetchRandomImage();
+  }, []);
+
+  const updateData = () => {
+    setIsFetching(true);
+    fetchRandomImage();
+  };
+
+  const fetchRandomImage = async () => {
+    try {
+      const response = await axios.get(UNSPLASH_URL);
+      const newData = response.data.map((item) => {
+        return {
+          id: item.id,
+          img: item.urls.small,
+          author: item.user.name,
+        };
+      });
+      setData([...data, ...newData]);
+      setIsFetching(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <FlatList
-        data={DATA}
-        renderItem={renderItem}
+        data={data}
+        renderItem={({ item }) => <Pressable><Image style={styles.item} source={{ uri: item.img }} /></Pressable>}
         keyExtractor={(item) => item.id}
         numColumns={2}
+        extraData={data}
+        onEndReached={() => updateData()}
       />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#a9a9a9",
+  },
   item: {
-    width: 150,
-    height: 150,
+    width: 190,
+    height: 190,
     margin: 10,
+    borderRadius: 10,
+    flex: 1,
   },
 });
 
