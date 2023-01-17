@@ -22,6 +22,8 @@ function Home({ navigation }) {
       const newData = response.data.map((item) => {
         return {
           id: item.id,
+          width: item.width, 
+          height: item.height,
           img: item.urls.regular,
           author: item.user.name,
         };
@@ -37,6 +39,7 @@ function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        style={{marginTop: -30}}
         data={data}
         renderItem={({ item }) => <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}><Image style={styles.item} source={{ uri: item.img }} /></Pressable>}
         keyExtractor={(item) => item.id}
@@ -50,16 +53,21 @@ function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     height: "100%",
     width: "100%",
-    backgroundColor: "#a9a9a9",
+    backgroundColor: "#f0f0f0",
   },
   item: {
-    width: 190,
-    height: 190,
+    flex: 1,
+    width: 170,
+    height: undefined,
+    aspectRatio: 1,
+    marginTop: 20,
     margin: 10,
     borderRadius: 10,
-    flex: 1,
   },
 });
 
