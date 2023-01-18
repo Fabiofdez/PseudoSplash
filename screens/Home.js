@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
-    width: Dimensions.get('window').width / 2 - 25,
+    width: (Dimensions.get('window').width / 2) - 20,
     height: undefined,
     aspectRatio: 1,
-    marginTop: 20,
-    marginHorizontal: 10,
+    marginTop: 15,
+    marginHorizontal: 7,
     borderRadius: 10,
   },
 });
