@@ -6,15 +6,24 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const options = {
-    title: "Full Image"
-  }
   
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="FullImg" component={FullImg} options={options} />
+        <Stack.Screen 
+          name="Home" 
+          component={Home} 
+          options={{
+            title: "Wallpapers", 
+            headerTitleAlign: 'center',
+            headerTitleStyle: ',bold,,' 
+          }}
+        />
+        <Stack.Screen 
+          name="FullImg" 
+          component={FullImg} 
+          options={{title: "Image Details"}} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

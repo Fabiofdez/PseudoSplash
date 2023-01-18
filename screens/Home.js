@@ -26,6 +26,7 @@ function Home({ navigation }) {
           height: item.height,
           img: item.urls.regular,
           author: item.user.name,
+          download: item.links.download,
         };
       });
       setData([...data, ...newData]);
