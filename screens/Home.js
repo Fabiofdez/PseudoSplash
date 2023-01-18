@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, Pressable, StyleSheet, Image } from "react-native";
+import { View, Text, FlatList, Pressable, StyleSheet, Image, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 
@@ -38,36 +38,34 @@ function Home({ navigation }) {
 
   
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
-        style={{marginTop: -30}}
         data={data}
         renderItem={({ item }) => <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}><Image style={styles.item} source={{ uri: item.img }} /></Pressable>}
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
         onEndReached={() => updateData()}
+        columnWrapperStyle={{justifyContent: 'center'}}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     height: "100%",
     width: "100%",
     backgroundColor: "#f0f0f0",
   },
   item: {
     flex: 1,
-    width: 170,
+    width: Dimensions.get('window').width / 2 - 25,
     height: undefined,
     aspectRatio: 1,
     marginTop: 20,
-    margin: 10,
+    marginHorizontal: 10,
     borderRadius: 10,
   },
 });

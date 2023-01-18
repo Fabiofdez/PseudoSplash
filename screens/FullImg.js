@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Image, View, StyleSheet, Modal, Pressable } from "react-native";
+import { Text, View, StyleSheet, Modal, Pressable, Alert } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
@@ -10,18 +10,21 @@ function FullImg({ route }) {
   const [ modalState, setModalState ] = useState(false);
 
   const handleDownload = async () => {
+    let date = moment().format('YYYYMMDD_hhmmss');
+    let fileUri = `${FileSystem.documentDirectory}${date}.png`;
     try {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status === "granted") {
-        const date = moment().format('YYYYMMDD_hhmmss');
-        const fileUri = `${FileSystem.documentDirectory}${date}.png`;
-        await MediaLibrary.saveToLibraryAsync(fileUri);
-        console.log("Image successfully saved");
+      const res = await FileSystem.downloadAsync(item.download, fileUri);
+      await MediaLibrary.requestPermissionsAsync();
+      try {
+        await MediaLibrary.createAssetAsync(fileUri);
+        Alert.alert(date + '.png',  'Download complete.');
+      } catch (err) {
+        console.log("Save err: ", err);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log("Error: ", err);
     }
-  };
+  }
 
   const toggleModal = () => {
     setModalState(!modalState);
@@ -51,7 +54,7 @@ function FullImg({ route }) {
         />
         <Text style={styles.item}>
           Photographer: {item.author}{"\n"}
-          {item.width} x {item.height}
+          {item.width} × {item.height}
         </Text>
         <Pressable style={styles.button} onPress={handleDownload}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>Download</Text>

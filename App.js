@@ -16,7 +16,7 @@ export default function App() {
           options={{
             title: "Wallpapers", 
             headerTitleAlign: 'center',
-            headerTitleStyle: ',bold,,' 
+            headerTitleStyle: {fontWeight: 'bold'},
           }}
         />
         <Stack.Screen 
