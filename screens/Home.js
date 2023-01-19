@@ -22,14 +22,12 @@ function Home({ navigation }) {
       const newData = response.data.map((item) => {
         return {
           id: item.id,
-          width: item.width, 
-          height: item.height,
           img: item.urls.regular,
           author: item.user.name,
           download: item.links.download,
         };
       });
-      setData([...data, ...newData]);
+      setData([...newData]);
     } catch (error) {
       console.log(error);
     }
@@ -55,7 +53,7 @@ function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: -25,
+    marginTop: '-7%',
     height: "100%",
     width: "100%",
     backgroundColor: "#f0f0f0",
@@ -65,8 +63,7 @@ const styles = StyleSheet.create({
     width: (Dimensions.get('window').width / 2) - 20,
     height: undefined,
     aspectRatio: 1,
-    marginTop: 15,
-    marginHorizontal: 7,
+    margin: 7,
     borderRadius: 10,
   },
 });
