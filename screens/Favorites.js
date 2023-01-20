@@ -1,40 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, Pressable, StyleSheet, Image, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import axios from "axios";
+import favData from '../favorites.json'
 
-import { UNSPLASH_URL } from "@env";
-
-function Home({ navigation }) {
+function Favorites({navigation}) {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    fetchRandomImage();
+    fetchFavorites();
   }, []);
 
-  const updateData = () => {
-    fetchRandomImage();
-  };
-
-  const fetchRandomImage = async () => {
+  const fetchFavorites = () => {
     try {
-      const response = await axios.get(UNSPLASH_URL);
-      const newData = response.data.map((item) => {
-        return {
-          id: item.id,
-          img: item.urls.regular,
-          author: item.user.name,
-          download: item.links.download,
-        };
-      });
-      setData([...newData]);
+      setData(favData);
     } catch (error) {
       console.log(error);
     }
   };
 
-
-  
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -42,7 +25,6 @@ function Home({ navigation }) {
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
-        onEndReached={() => updateData()}
         columnWrapperStyle={{justifyContent: 'center'}}
         renderItem={({ item }) => 
           <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}>
@@ -71,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Favorites;
