@@ -15,8 +15,7 @@ import { View } from "react-native";
 
 function Favorites({ navigation }) {
   const [data, setData] = useState([]);
-  var favorites = [];
-
+  
   useEffect(() => {
     fetchFavorites();
   }, []);
@@ -24,16 +23,14 @@ function Favorites({ navigation }) {
   const fetchFavorites = async () => {
     try {
       const favFile = await AsyncStorage.getItem("favorites");
-      favorites = Array.from(JSON.parse(favFile));
-      setData(favorites);
+      setData(Array.from(JSON.parse(favFile)));
     } catch (error) {
       console.log(error);
     }
   };
 
   function favEmpty() {
-    console.log(favorites);
-    return favorites.length > 0 ? 0 : 100;
+    return data.length > 0 ? 0 : 100;
   }
 
   return (
@@ -42,7 +39,7 @@ function Favorites({ navigation }) {
         data={data}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        extraData={favorites}
+        extraData={data}
         renderItem={({ item }) => (
           <Pressable
             onPress={() => navigation.navigate("FullImg", { item: item })}
