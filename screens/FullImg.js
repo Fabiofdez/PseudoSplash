@@ -47,8 +47,10 @@ function FullImg({ route }) {
   const handleFavorite = async () => {
     await getFavorites();
     if (imgSaved() >= 0) {
+      toast.show('Image Removed from Favorites', {type: 'rounded_toast'});
       favData.splice(imgSaved(), 1);
     } else {
+      toast.show('Image Added to Favorites', {type: 'rounded_toast'});
       favData.push(item);
     }
     AsyncStorage.setItem('favorites', JSON.stringify(favData));

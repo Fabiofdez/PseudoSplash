@@ -10,49 +10,50 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  
   return (
     <ToastProvider
       renderType={{
         rounded_toast: (toast) => (
           <View style={styles.toast}>
-            <Text style={styles.text}>
-              {toast.message}
-            </Text>
+            <Text style={styles.text}>{toast.message}</Text>
           </View>
-        )
+        ),
       }}
       swipeEnabled={true}
       duration={1500}
     >
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen 
-            name="Home" 
-            component={Home} 
-            options={({navigation}) => ({
-              title: "Wallpapers", 
-              headerTitleAlign: 'center',
-              headerTitleStyle: {fontWeight: 'bold'},
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={({ navigation }) => ({
+              title: "Wallpapers",
+              headerTitleAlign: "center",
+              headerTitleStyle: { fontWeight: "bold" },
               headerRight: () => (
-                <Pressable onPress={() => {navigation.navigate("Favorites")}}>
-                  <Ionicons name='star' size={25} color='#506070'/>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("Favorites");
+                  }}
+                >
+                  <Ionicons name="star" size={25} color="#506070" />
                 </Pressable>
-              )
+              ),
             })}
           />
           <Stack.Screen
-            name="Favorites" 
-            component={Favorites} 
+            name="Favorites"
+            component={Favorites}
             options={{
-              headerTitleAlign: 'center',
-              headerTitleStyle: {fontWeight: 'bold'}
+              headerTitleAlign: "center",
+              headerTitleStyle: { fontWeight: "bold" },
             }}
           />
-          <Stack.Screen 
-            name="FullImg" 
-            component={FullImg} 
-            options={{title: "Image Details"}} 
+          <Stack.Screen
+            name="FullImg"
+            component={FullImg}
+            options={{ title: "Image Details" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -65,12 +66,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 50,
-    backgroundColor: '#202020ca',
-    marginBottom: '14%'
+    backgroundColor: "#202020ca",
+    marginBottom: "14%",
   },
   text: {
-    color: '#fff',
-    fontSize: 16, 
-  }
-})
-
+    color: "#fff",
+    fontSize: 16,
+  },
+});

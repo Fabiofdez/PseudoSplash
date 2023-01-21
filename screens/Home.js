@@ -27,7 +27,7 @@ function Home({ navigation }) {
           download: item.links.download,
         };
       });
-      setData([...newData]);
+      setData([...data, ...newData]);
     } catch (error) {
       console.log(error);
     }

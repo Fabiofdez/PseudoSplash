@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Pressable, StyleSheet, Image, Text, Dimensions } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Image,
+  Text,
+  Dimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import emptyFolder from '../assets/emptyFolder.png'
+import emptyFolder from "../assets/emptyFolder.png";
 import { RefreshControl } from "react-native";
 import { View } from "react-native";
 
-function Favorites({navigation}) {
+function Favorites({ navigation }) {
   const [data, setData] = useState([]);
   var favorites = [];
 
@@ -16,7 +23,7 @@ function Favorites({navigation}) {
 
   const fetchFavorites = async () => {
     try {
-      const favFile = await AsyncStorage.getItem('favorites');
+      const favFile = await AsyncStorage.getItem("favorites");
       favorites = Array.from(JSON.parse(favFile));
       setData(favorites);
     } catch (error) {
@@ -26,7 +33,7 @@ function Favorites({navigation}) {
 
   function favEmpty() {
     console.log(favorites);
-    return (favorites.length > 0) ? 0 : 100;
+    return favorites.length > 0 ? 0 : 100;
   }
 
   return (
@@ -35,14 +42,19 @@ function Favorites({navigation}) {
         data={data}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        extraData={data}
-        renderItem={({ item }) => 
-        <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}>
-          <Image style={styles.item} source={{ uri: item.img }} />
-        </Pressable>}
+        extraData={favorites}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => navigation.navigate("FullImg", { item: item })}
+          >
+            <Image style={styles.item} source={{ uri: item.img }} />
+          </Pressable>
+        )}
+        onRefresh={() => fetchFavorites()}
+        refreshing={false}
       />
       <View>
-        <Image source={emptyFolder} style={{opacity: favEmpty()}}/>
+        <Image source={emptyFolder} style={{ opacity: favEmpty() }} />
       </View>
     </SafeAreaView>
   );
@@ -51,15 +63,15 @@ function Favorites({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '-7%',
+    marginTop: "-7%",
     height: "100%",
     width: "100%",
     backgroundColor: "#f0f0f0",
-    alignItems: 'center'
+    alignItems: "center",
   },
   item: {
     flex: 1,
-    width: (Dimensions.get('window').width / 2) - 20,
+    width: Dimensions.get("window").width / 2 - 20,
     height: undefined,
     aspectRatio: 1,
     margin: 7,
