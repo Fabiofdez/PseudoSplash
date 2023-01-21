@@ -46,7 +46,6 @@ function FullImg({ route }) {
   
   const handleFavorite = async () => {
     await getFavorites();
-    console.log(imgSaved() >= 0);
     if (imgSaved() >= 0) {
       favData.splice(imgSaved(), 1);
     } else {

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { FlatList, Pressable, StyleSheet, Image, Text, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import emptyFolder from '../assets/emptyFolder.png'
+import { RefreshControl } from "react-native";
+import { View } from "react-native";
 
 function Favorites({navigation}) {
   const [data, setData] = useState([]);
@@ -12,10 +15,9 @@ function Favorites({navigation}) {
   }, []);
 
   const fetchFavorites = async () => {
-    const favFile = await AsyncStorage.getItem('favorites');
     try {
+      const favFile = await AsyncStorage.getItem('favorites');
       favorites = Array.from(JSON.parse(favFile));
-      console.log(favorites);
       setData(favorites);
     } catch (error) {
       console.log(error);
@@ -23,23 +25,25 @@ function Favorites({navigation}) {
   };
 
   function favEmpty() {
+    console.log(favorites);
     return (favorites.length > 0) ? 0 : 100;
   }
 
-
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{opacity: favEmpty()}}>Empty</Text>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
         renderItem={({ item }) => 
-          <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}>
-            <Image style={styles.item} source={{ uri: item.img }} />
-          </Pressable>}
+        <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}>
+          <Image style={styles.item} source={{ uri: item.img }} />
+        </Pressable>}
       />
+      <View>
+        <Image source={emptyFolder} style={{opacity: favEmpty()}}/>
+      </View>
     </SafeAreaView>
   );
 }
