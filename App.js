@@ -15,7 +15,7 @@ export default function App() {
       renderType={{
         rounded_toast: (toast) => (
           <View style={styles.toast}>
-            <Text style={styles.text}>{toast.message}</Text>
+            <Text style={styles.toastText}>{toast.message}</Text>
           </View>
         ),
       }}
@@ -23,21 +23,24 @@ export default function App() {
       duration={1500}
     >
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+          headerStyle: {backgroundColor: '#f5fcff'},
+          headerTitleAlign: "center",
+          headerTitleStyle: styles.headerText,
+          headerShadowVisible: false,
+        }}>
           <Stack.Screen
             name="Home"
             component={Home}
             options={({ navigation }) => ({
               title: "Wallpapers",
-              headerTitleAlign: "center",
-              headerTitleStyle: { fontWeight: "bold" },
               headerRight: () => (
                 <Pressable
                   onPress={() => {
                     navigation.navigate("Favorites");
                   }}
                 >
-                  <Ionicons name="star" size={25} color="#506070" />
+                  <Ionicons name="star" size={25} color="#506475" />
                 </Pressable>
               ),
             })}
@@ -45,15 +48,11 @@ export default function App() {
           <Stack.Screen
             name="Favorites"
             component={Favorites}
-            options={{
-              headerTitleAlign: "center",
-              headerTitleStyle: { fontWeight: "bold" },
-            }}
           />
           <Stack.Screen
             name="FullImg"
             component={FullImg}
-            options={{ title: "Image Details" }}
+            options={{title: "Image Details"}}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -66,11 +65,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 50,
-    backgroundColor: "#202020ca",
+    backgroundColor: "#20252aca",
     marginBottom: "14%",
   },
-  text: {
+  toastText: {
     color: "#fff",
     fontSize: 16,
   },
+  headerText: {
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    color: '#4b595e'
+  }
 });

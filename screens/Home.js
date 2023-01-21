@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     marginTop: "-7%",
     height: "100%",
     width: "100%",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f5fcff",
     alignItems: "center",
   },
   item: {

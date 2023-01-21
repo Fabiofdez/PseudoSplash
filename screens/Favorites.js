@@ -13,11 +13,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RefreshControl } from "react-native";
 import { View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import emptyFolder from "../assets/emptyFolder.png"
 
 function Favorites({ navigation }) {
   const [data, setData] = useState([]);
   const isFocused = useIsFocused();
-
+  
   useEffect(() => {
     isFocused && fetchFavorites();
   }, [isFocused]);
@@ -32,11 +33,17 @@ function Favorites({ navigation }) {
   };
 
   function favEmpty() {
-    return data.length > 0 ? 0 : 100;
+    return data.length > 0;
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      <View height={favEmpty() ? 0:'auto'} alignItems='center'>
+        <Image source={emptyFolder} style={[{width: favEmpty() ? 0:'75%'}, styles.emptyImg]}/>
+        <Text style={styles.emptyText}>
+          Nothing in Favorites
+        </Text>
+      </View>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -52,17 +59,6 @@ function Favorites({ navigation }) {
         onRefresh={() => fetchFavorites()}
         refreshing={false}
       />
-      <View style={styles.empty}>
-        <FontAwesome
-          name="star-half-empty"
-          size={150}
-          color="black"
-          style={{ opacity: favEmpty() }}
-        />
-        <Text style={{ opacity: favEmpty() }}>
-          You do not have any favorites!
-        </Text>
-      </View>
     </SafeAreaView>
   );
 }
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
     marginTop: "-7%",
     height: "100%",
     width: "100%",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f5fcff",
     alignItems: "center",
   },
   item: {
@@ -84,12 +80,18 @@ const styles = StyleSheet.create({
     margin: 7,
     borderRadius: 10,
   },
-  empty: {
-    position: "relative",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  emptyImg: {
+    marginTop: '20%',
+    height: undefined, 
+    aspectRatio: 1
   },
+  emptyText: {
+    color: '#57727d',
+    textAlign: 'center',
+    fontWeight: 'bold', 
+    fontSize: 25, 
+    opacity: 0.4
+  }
 });
 
 export default Favorites;

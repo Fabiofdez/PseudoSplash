@@ -13,18 +13,18 @@ function FullImg({ route }) {
   const [favorite, setFavorite] = useState(false);
   const toast = useToast();
   let favData = [];
-
+  
   const getFavorites = async () => {
     let favFile = await AsyncStorage.getItem("favorites");
     if (favFile != null) {
       favData = Array.from(JSON.parse(favFile));
     }
   };
-
+  
   const handleDownload = async () => {
     let date = moment().format("YYYYMMDD_hhmmss");
     let fileUri = `${FileSystem.documentDirectory}${date}.png`;
-
+    
     try {
       await MediaLibrary.requestPermissionsAsync();
       await FileSystem.downloadAsync(item.download, fileUri);
@@ -38,23 +38,23 @@ function FullImg({ route }) {
       console.log("Write: ", err);
     }
   };
-
+  
   function imgSaved() {
     const index = favData.findIndex(
       (element) => JSON.stringify(element) === JSON.stringify(item)
     );
     return index;
   }
-
+  
   const handleFavorite = async () => {
     await getFavorites();
     if (imgSaved() >= 0) {
       setFavorite(false);
-      toast.show("Image Removed from Favorites", { type: "rounded_toast" });
+      toast.show("Removed from Favorites", { type: "rounded_toast" });
       favData.splice(imgSaved(), 1);
     } else {
       setFavorite(true);
-      toast.show("Image Added to Favorites", { type: "rounded_toast" });
+      toast.show("Added to Favorites", { type: "rounded_toast" });
       favData.push(item);
     }
     AsyncStorage.setItem("favorites", JSON.stringify(favData));
@@ -63,41 +63,41 @@ function FullImg({ route }) {
   const toggleModal = () => {
     setModalState(!modalState);
   };
-
-  return (
-    <View style={{ flex: 1 }}>
-      <Modal
+  
+  return (  
+    <View style={{ flex: 1, backgroundColor: '#f5fcff'}} >
+      <Modal 
         visible={modalState}
         statusBarTranslucent={true}
         presentationStyle="fullScreen"
         animationType="fade"
         style={{ justifyContent: "center" }}
       >
-        <ImageViewer
+        <ImageViewer 
           imageUrls={[{ url: item.img }]}
           renderIndicator={() => {}}
-          backgroundColor="#606060"
+          backgroundColor="#606566"
           saveToLocalByLongPress={false}
           onClick={toggleModal}
         />
       </Modal>
-      <ImageViewer
+      <ImageViewer 
         imageUrls={[{ url: item.img }]}
         renderIndicator={() => {}}
-        backgroundColor="#f0f0f0"
+        backgroundColor="#f5fcff"
         saveToLocalByLongPress={false}
         onClick={toggleModal}
         style={{ justifyContent: "center" }}
       />
       <Text style={styles.item}>Photographer: {item.author}</Text>
       <View style={styles.buttonRow}>
-        <Pressable
+        <Pressable 
           style={[styles.button, { backgroundColor: "#0070e6" }]}
           onPress={handleDownload}
         >
           <Text style={[styles.buttonText, { color: "#fff" }]}>Download</Text>
         </Pressable>
-        <Pressable
+        <Pressable 
           style={[
             styles.button,
             { backgroundColor: imgSaved() >= 0 ? "#df4a8980" : "#00000035" },
@@ -110,13 +110,13 @@ function FullImg({ route }) {
         </Pressable>
       </View>
     </View>
-  );
+  );  
 }
 
 const styles = StyleSheet.create({
   item: {
     fontSize: 18,
-    color: "#808080",
+    color: "#798d94",
     margin: 15,
     alignContent: "flex-start",
   },
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 20, 
     fontWeight: "bold",
   },
 });
