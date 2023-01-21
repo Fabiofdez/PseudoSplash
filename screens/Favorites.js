@@ -12,13 +12,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import emptyFolder from "../assets/emptyFolder.png";
 import { RefreshControl } from "react-native";
 import { View } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 function Favorites({ navigation }) {
   const [data, setData] = useState([]);
+  const isFocused = useIsFocused();
   
   useEffect(() => {
-    fetchFavorites();
-  }, []);
+    isFocused && fetchFavorites();
+  }, [isFocused]);
 
   const fetchFavorites = async () => {
     try {
