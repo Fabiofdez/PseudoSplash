@@ -33,7 +33,6 @@ function Home({ navigation }) {
     }
   };
 
-
   
   return (
     <SafeAreaView style={styles.container}>
@@ -43,7 +42,6 @@ function Home({ navigation }) {
         numColumns={2}
         extraData={data}
         onEndReached={() => updateData()}
-        columnWrapperStyle={{justifyContent: 'center'}}
         renderItem={({ item }) => 
           <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}>
             <Image style={styles.item} source={{ uri: item.img }} />
@@ -60,6 +58,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: "#f0f0f0",
+    alignItems: 'center'
   },
   item: {
     flex: 1,

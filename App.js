@@ -3,55 +3,11 @@ import Favorites from "./screens/Favorites.js";
 import FullImg from "./screens/FullImg.js";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ToastProvider } from "react-native-toast-notifications";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Pressable } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-const HomeStack = createNativeStackNavigator();
-const FavoriteStack = createNativeStackNavigator();
-
-function HomeScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen 
-        name="Home" 
-        component={Home} 
-        options={{
-          title: "Wallpapers", 
-          headerTitleAlign: 'center',
-          headerTitleStyle: {fontWeight: 'bold'}
-        }}
-      />
-      <HomeStack.Screen 
-        name="FullImg" 
-        component={FullImg} 
-        options={{title: "Image Details"}} 
-      />
-    </HomeStack.Navigator>
-  )
-}
-
-function FavoriteScreen() {
-  return (
-    <FavoriteStack.Navigator>
-      <FavoriteStack.Screen 
-        name="Favorites" 
-        component={Favorites} 
-        options={{
-          headerTitleAlign: 'center',
-          headerTitleStyle: {fontWeight: 'bold'}
-        }}
-      />
-      <FavoriteStack.Screen 
-        name="FullImg" 
-        component={FullImg} 
-        options={{title: "Image Details"}} 
-      />
-    </FavoriteStack.Navigator>
-  )
-}
-
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   
@@ -70,25 +26,43 @@ export default function App() {
       duration={1500}
     >
       <NavigationContainer>
-        <Tab.Navigator screenOptions={{headerShown: false}}>
-          <Tab.Screen 
-            name="HomeScreen" 
-            component={HomeScreen} 
+        <Stack.Navigator>
+          <Stack.Screen 
+            name="Home" 
+            component={Home} 
+            options={({navigation}) => ({
+              title: "Wallpapers", 
+              headerTitleAlign: 'center',
+              headerTitleStyle: {fontWeight: 'bold'},
+              headerRight: () => (
+                <Pressable onPress={() => {navigation.navigate("Favorites")}}>
+                  <Ionicons name='star' size={25} color='#506070'/>
+                </Pressable>
+              )
+            })}
           />
-          <Tab.Screen 
-            name="FavoriteScreen" 
-            component={FavoriteScreen} 
+          <Stack.Screen
+            name="Favorites" 
+            component={Favorites} 
+            options={{
+              headerTitleAlign: 'center',
+              headerTitleStyle: {fontWeight: 'bold'}
+            }}
           />
-        </Tab.Navigator>
+          <Stack.Screen 
+            name="FullImg" 
+            component={FullImg} 
+            options={{title: "Image Details"}} 
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     </ToastProvider>
   );
-
 }
 
 const styles = StyleSheet.create({
   toast: {
-    paddingHorizontal: 18,
+    paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 50,
     backgroundColor: '#202020ca',
