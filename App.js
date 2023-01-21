@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ToastProvider } from "react-native-toast-notifications";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   FlatList,
   Pressable,
@@ -9,15 +10,14 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import emptyFolder from "../assets/emptyFolder.png";
 import { RefreshControl } from "react-native";
 import { View } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
 
 function Favorites({ navigation }) {
   const [data, setData] = useState([]);
   const isFocused = useIsFocused();
-  
+
   useEffect(() => {
     isFocused && fetchFavorites();
   }, [isFocused]);
@@ -52,8 +52,16 @@ function Favorites({ navigation }) {
         onRefresh={() => fetchFavorites()}
         refreshing={false}
       />
-      <View>
-        <Image source={emptyFolder} style={{ opacity: favEmpty() }} />
+      <View style={styles.empty}>
+        <FontAwesome
+          name="star-half-empty"
+          size={150}
+          color="black"
+          style={{ opacity: favEmpty() }}
+        />
+        <Text style={{ opacity: favEmpty() }}>
+          You do not have any favorites!
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -75,6 +83,12 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     margin: 7,
     borderRadius: 10,
+  },
+  empty: {
+    position: "relative",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

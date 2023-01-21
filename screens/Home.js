@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Pressable, StyleSheet, Image, Dimensions } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 
 import { UNSPLASH_URL } from "@env";
 
 function Home({ navigation }) {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchRandomImage();
@@ -33,7 +39,6 @@ function Home({ navigation }) {
     }
   };
 
-  
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -42,10 +47,13 @@ function Home({ navigation }) {
         numColumns={2}
         extraData={data}
         onEndReached={() => updateData()}
-        renderItem={({ item }) => 
-          <Pressable onPress={() => navigation.navigate("FullImg", {item: item})}>
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => navigation.navigate("FullImg", { item: item })}
+          >
             <Image style={styles.item} source={{ uri: item.img }} />
-          </Pressable>}
+          </Pressable>
+        )}
       />
     </SafeAreaView>
   );
@@ -54,15 +62,15 @@ function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '-7%',
+    marginTop: "-7%",
     height: "100%",
     width: "100%",
     backgroundColor: "#f0f0f0",
-    alignItems: 'center'
+    alignItems: "center",
   },
   item: {
     flex: 1,
-    width: (Dimensions.get('window').width / 2) - 20,
+    width: Dimensions.get("window").width / 2 - 20,
     height: undefined,
     aspectRatio: 1,
     margin: 7,
