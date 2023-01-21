@@ -28,6 +28,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerTitleStyle: styles.headerText,
           headerShadowVisible: false,
+          headerTintColor: '#506475'
         }}>
           <Stack.Screen
             name="Home"
@@ -75,6 +76,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24, 
     fontWeight: 'bold', 
-    color: '#4b595e'
+    color: '#506475'
   }
 });
