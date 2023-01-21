@@ -47,6 +47,7 @@ function Home({ navigation }) {
         numColumns={2}
         extraData={data}
         onEndReached={() => updateData()}
+        contentContainerStyle={{paddingVertical: 7}}
         renderItem={({ item }) => (
           <Pressable
             onPress={() => navigation.navigate("FullImg", { item: item })}

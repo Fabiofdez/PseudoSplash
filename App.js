@@ -24,11 +24,11 @@ export default function App() {
     >
       <NavigationContainer>
         <Stack.Navigator screenOptions={{
-          headerStyle: {backgroundColor: '#f5fcff'},
+          headerStyle: {backgroundColor: "#d1e6f0"},
           headerTitleAlign: "center",
           headerTitleStyle: styles.headerText,
           headerShadowVisible: false,
-          headerTintColor: '#506475'
+          headerTintColor: "#506475",
         }}>
           <Stack.Screen
             name="Home"
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 24, 
-    fontWeight: 'bold', 
-    color: '#506475'
+    fontWeight: "bold", 
+    color: "#506475"
   }
 });

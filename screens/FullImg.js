@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Modal, Pressable } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import ImageViewer from "react-native-image-zoom-viewer";
@@ -13,6 +13,14 @@ function FullImg({ route }) {
   const [favorite, setFavorite] = useState(false);
   const toast = useToast();
   let favData = [];
+
+  useEffect(() => {
+    const retrieve = async () => {
+      await getFavorites();
+      setFavorite(imgSaved() >= 0);
+    }
+    retrieve();
+  }, []);
   
   const getFavorites = async () => {
     let favFile = await AsyncStorage.getItem("favorites");
@@ -50,11 +58,9 @@ function FullImg({ route }) {
     await getFavorites();
     if (imgSaved() >= 0) {
       setFavorite(false);
-      toast.show("Removed from Favorites", { type: "rounded_toast" });
       favData.splice(imgSaved(), 1);
     } else {
       setFavorite(true);
-      toast.show("Added to Favorites", { type: "rounded_toast" });
       favData.push(item);
     }
     AsyncStorage.setItem("favorites", JSON.stringify(favData));
@@ -65,7 +71,7 @@ function FullImg({ route }) {
   };
   
   return (  
-    <View style={{ flex: 1, backgroundColor: '#f5fcff'}} >
+    <View style={{ flex: 1, backgroundColor: "#d1e6f0"}} >
       <Modal 
         visible={modalState}
         statusBarTranslucent={true}
@@ -89,7 +95,6 @@ function FullImg({ route }) {
         onClick={toggleModal}
         style={{ justifyContent: "center" }}
       />
-      <Text style={styles.item}>Photographer: {item.author}</Text>
       <View style={styles.buttonRow}>
         <Pressable 
           style={[styles.button, { backgroundColor: "#0070e6" }]}
@@ -100,39 +105,39 @@ function FullImg({ route }) {
         <Pressable 
           style={[
             styles.button,
-            { backgroundColor: imgSaved() >= 0 ? "#df4a8980" : "#00000035" },
+            { backgroundColor: favorite ? "#df4a8980" : "#00000035" },
           ]}
           onPress={handleFavorite}
         >
           <Text style={styles.buttonText}>
-            {imgSaved() >= 0 ? "Saved" : "Favorite"}
+            {favorite ? "Saved" : "Favorite"}
           </Text>
         </Pressable>
       </View>
+      <Text style={styles.info}>Photographer: {item.author}</Text>
     </View>
   );  
 }
 
 const styles = StyleSheet.create({
-  item: {
+  info: {
     fontSize: 18,
     color: "#798d94",
     margin: 15,
-    alignContent: "flex-start",
+    alignSelf: "center",
   },
   buttonRow: {
+    paddingHorizontal: 30,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignContent: "space-around",
     width: "100%",
   },
   button: {
-    marginLeft: 15,
-    marginBottom: 20,
+    marginVertical: 15,
     borderRadius: 15,
     paddingHorizontal: 30,
     paddingVertical: 12,
-    flexDirection: "row",
   },
   buttonText: {
     fontSize: 20, 

@@ -38,10 +38,10 @@ function Favorites({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View height={favEmpty() ? 0:'auto'} alignItems='center'>
-        <Image source={emptyFolder} style={[{width: favEmpty() ? 0:'75%'}, styles.emptyImg]}/>
+      <View height={favEmpty() ? 0:"auto"} alignItems="center">
+        <Image source={emptyFolder} style={[{width: favEmpty() ? 0:"75%"}, styles.emptyImg]}/>
         <Text style={styles.emptyText}>
-          Nothing in Favorites
+          Nothing Saved Yet
         </Text>
       </View>
       <FlatList
@@ -49,6 +49,7 @@ function Favorites({ navigation }) {
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
+        contentContainerStyle={{paddingVertical: 7}}
         renderItem={({ item }) => (
           <Pressable
             onPress={() => navigation.navigate("FullImg", { item: item })}
@@ -81,14 +82,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   emptyImg: {
-    marginTop: '20%',
+    marginTop: "20%",
     height: undefined, 
     aspectRatio: 1
   },
   emptyText: {
-    color: '#57727d',
-    textAlign: 'center',
-    fontWeight: 'bold', 
+    color: "#57728d",
+    textAlign: "center",
+    fontWeight: "bold", 
     fontSize: 25, 
     opacity: 0.4
   }
