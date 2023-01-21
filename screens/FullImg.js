@@ -1,37 +1,58 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, Modal, Pressable, Alert } from "react-native";
+import { Text, View, StyleSheet, Modal, Pressable } from "react-native";
+import { useToast } from "react-native-toast-notifications";
 import ImageViewer from "react-native-image-zoom-viewer";
+import moment from "moment/moment";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
-import moment from "moment/moment";
-import { useToast } from "react-native-toast-notifications";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function FullImg({ route }) {
   const { item } = route.params;
   const [ modalState, setModalState ] = useState(false);
   const toast = useToast();
-
+  var favData = [];
+  
+  const getFavorites = async () => {
+    var favFile = await AsyncStorage.getItem('favorites');
+    if (favFile != null) {
+      favData = Array.from(JSON.parse(favFile));
+    }
+  }
+  
   const handleDownload = async () => {
-    let date = moment().format('YYYYMMDD_hhmmss');
-    let fileUri = `${FileSystem.documentDirectory}${date}.png`;
-
+    var date = moment().format('YYYYMMDD_hhmmss');
+    var fileUri = `${FileSystem.documentDirectory}${date}.png`;
+    
     try {
-      const res = await FileSystem.downloadAsync(item.download, fileUri);
       await MediaLibrary.requestPermissionsAsync();
+      await FileSystem.downloadAsync(item.download, fileUri);
       try {
         await MediaLibrary.createAssetAsync(fileUri);
-        // this.toast.show('Downloaded');
+        toast.show('Image Downloaded', {type: 'rounded_toast'});
       } catch (err) {
         console.log("Save err: ", err);
       }
     } catch (err) {
-      console.log("Error: ", err);
+      console.log("Write: ", err);
     }
   }
-
-  const handleFavorite = () => {
-    toast.show('Added to Favorites', {type: 'rounded_toast'});
-    // TODO
+  
+  function imgSaved() {
+    return favData.findIndex(
+      element => JSON.stringify(element) === JSON.stringify(item)
+    );
+  }
+  
+  const handleFavorite = async () => {
+    await getFavorites();
+    console.log(imgSaved() >= 0);
+    if (imgSaved() >= 0) {
+      favData.splice(imgSaved(), 1);
+    } else {
+      favData.push(item);
+    }
+    AsyncStorage.setItem('favorites', JSON.stringify(favData));
   }
 
   const toggleModal = () => {
@@ -73,9 +94,9 @@ function FullImg({ route }) {
           <Text style={[styles.buttonText, {color: '#fff'}]}>Download</Text>
         </Pressable>
         <Pressable 
-          style={[styles.button, {backgroundColor: '#00000035'}]} 
+          style={[styles.button, {backgroundColor: (imgSaved() >= 0) ? '#df4a8980': '#00000035'}]} 
           onPress={handleFavorite}>
-          <Text style={styles.buttonText}>Favorite</Text>
+          <Text style={styles.buttonText}>{(imgSaved() >= 0) ? 'Saved' : 'Favorite'}</Text>
         </Pressable>
       </View>
     </View>
