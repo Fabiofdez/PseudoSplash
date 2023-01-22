@@ -5,44 +5,41 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  ScrollView,
+  Text, 
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
-import { SelectList } from "react-native-dropdown-select-list";
 
 import { API_ID } from "@env";
 
 function Home({ navigation }) {
   const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=10&"
   const [data, setData] = useState([]);
-  let selected = "";
+  const [selected, setSelected] = useState("");
   let API_URL = UNSPLASH_URL + API_ID;
 
-  const options = [
-    { key: "1", value: "Nature" },
-    { key: "2", value: "Street Photography" },
-    { key: "3", value: "Animals" },
-    { key: "4", value: "People" },
-    { key: "5", value: "Arts & Culture" },
-    { key: "6", value: "Wallpapers" },
-  ];
-
   useEffect(() => {
-    console.log(1, API_URL);
     fetchRandomImage();
   }, []);
 
-  const makeSelection = (val) => {
-    selected = val;
+  const makeSelection = async (val) => {
+    setSelected(val);
     API_URL = UNSPLASH_URL + API_ID + "&query="+val;
-    query = true;
     setData([]);
-    console.log(2, API_URL);
-    fetchRandomImage();
+    try {
+      const response = await axios.get(API_URL);
+      const newData = response.data.map(funcName);
+      setData([...newData]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const updateData = () => {
     API_URL = UNSPLASH_URL + API_ID + "&query="+selected;
+    console.log(selected);
     fetchRandomImage();
   };
 
@@ -75,19 +72,25 @@ function Home({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <SelectList
-        setSelected={(val) => makeSelection(val)}
-        data={options}
-        save="value"
-      />
+    <View style={styles.container}>
+      <ScrollView 
+        style={styles.tagBar}
+        horizontal={true}
+      >
+        <Pressable style={styles.tag} onPress={() => makeSelection("Nature")}>
+          <Text style={{paddingHorizontal: 18, paddingVertical: 5}}>Nature</Text>
+        </Pressable>
+        <Pressable style={styles.tag} onPress={() => makeSelection("People")}>
+          <Text style={{paddingHorizontal: 18, paddingVertical: 5}}>People</Text>
+        </Pressable>
+      </ScrollView>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
         onEndReached={updateData}
-        contentContainerStyle={{ paddingVertical: 7 }}
+        contentContainerStyle={{ paddingVertical: "2%" }}
         renderItem={({ item }) => (
           <Pressable
             onPress={() =>
@@ -102,27 +105,38 @@ function Home({ navigation }) {
           </Pressable>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: "-7%",
-    height: "100%",
-    width: "100%",
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
     backgroundColor: "#f5fcff",
     alignItems: "center",
   },
   item: {
     flex: 1,
-    width: Dimensions.get("window").width / 2 - 20,
+    width: Dimensions.get("window").width / 2.25,
     height: undefined,
     aspectRatio: 1,
     margin: 7,
     borderRadius: 10,
   },
+  tagBar: {
+    width: "100%", 
+    maxHeight: "5%",
+    backgroundColor: "#d1e6f0",
+    paddingBottom: 8
+  },
+  tag: { 
+    backgroundColor: "#00ffff", 
+    borderRadius: 50, 
+    justifyContent: "center",
+    margin: "auto",
+    marginHorizontal: 4
+  }
 });
 
 export default Home;
