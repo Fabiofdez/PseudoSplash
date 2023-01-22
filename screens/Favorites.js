@@ -20,7 +20,10 @@ function Favorites({ navigation }) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    isFocused && fetchFavorites();
+    const retrieve = async () => {
+      await fetchFavorites();
+    };
+    isFocused && retrieve();
   }, [isFocused]);
 
   const fetchFavorites = async () => {
@@ -35,6 +38,15 @@ function Favorites({ navigation }) {
   function favEmpty() {
     return data.length > 0;
   }
+
+  const urls = () => {
+    const urls = data.map((item) => {
+      return {
+        url: item.img,
+      };
+    });
+    return urls;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,7 +65,13 @@ function Favorites({ navigation }) {
         contentContainerStyle={{ paddingVertical: 7 }}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => navigation.navigate("FullImg", { item: item })}
+            onPress={() =>
+              navigation.navigate("FullImg", {
+                item: item,
+                urls: urls(),
+                data: data,
+              })
+            }
           >
             <Image style={styles.item} source={{ uri: item.img }} />
           </Pressable>

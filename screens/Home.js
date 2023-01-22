@@ -10,12 +10,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { SelectList } from "react-native-dropdown-select-list";
 
-import { UNSPLASH_URL } from "@env";
+import { UNSPLASH_URL, UNSPLASH_SEARCH } from "@env";
 
 function Home({ navigation }) {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState("");
-  const API_URL = `${UNSPLASH_URL}&query=${selected}`;
+  const [API_URL, setAPI_URL] = useState(`${UNSPLASH_URL}`);
+  const [query, setQuery] = useState(false);
 
   const options = [
     { key: "1", value: "Nature" },
@@ -30,29 +31,37 @@ function Home({ navigation }) {
     fetchRandomImage();
   }, []);
 
-  const makeSelection = (val) => {
+  const makeSelection = async (val) => {
     setSelected(val);
-    setAPI_URL(UNSPLASH_URL + val);
+    setAPI_URL(UNSPLASH_SEARCH + "&query=" + val);
+    setQuery(true);
     setData([]);
-    fetchRandomImage();
+    await fetchRandomImage();
   };
 
   const updateData = () => {
     fetchRandomImage();
   };
 
+  const funcName = (item) => {
+    return {
+      id: item.id,
+      img: item.urls.regular,
+      author: item.user.name,
+      download: item.links.download,
+    }
+  }
+
   const fetchRandomImage = async () => {
     try {
       const response = await axios.get(API_URL);
-      const newData = response.data.map((item) => {
-        return {
-          id: item.id,
-          img: item.urls.regular,
-          author: item.user.name,
-          download: item.links.download,
-        };
-      });
-      setData([...data, ...newData]);
+      let newData;
+      if (query) {
+        newData = response.data.results.map(funcName);
+      } else {
+        newData = response.data.map(funcName);
+      }
+      setData([...newData]);
     } catch (error) {
       console.log(error);
     }

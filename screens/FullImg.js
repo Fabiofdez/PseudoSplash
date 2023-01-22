@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { Text, View, StyleSheet, Modal, Pressable } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import ImageViewer from "react-native-image-zoom-viewer";
@@ -14,16 +14,16 @@ function FullImg({ route }) {
   const [updateItem, setUpdateItem] = useState(item);
   const toast = useToast();
   let favData = [];
-  const position = 0;
 
   useEffect(() => {
-    const retrieve = async () => {
-      await getFavorites();
-      setFavorite(imgSaved() >= 0);
-    };
     retrieve();
   }, []);
-
+  
+  const retrieve = async () => {
+    await getFavorites();
+    setFavorite(imgSaved() >= 0);
+  };
+  
   function itemIndex(i) {
     const index = urls.findIndex((element) => element.url === i.img);
     return index;
@@ -42,7 +42,7 @@ function FullImg({ route }) {
 
     try {
       await MediaLibrary.requestPermissionsAsync();
-      await FileSystem.downloadAsync(item.download, fileUri);
+      await FileSystem.downloadAsync(updateItem.download, fileUri);
       try {
         await MediaLibrary.createAssetAsync(fileUri);
         toast.show("Image Downloaded", { type: "rounded_toast" });
@@ -56,7 +56,7 @@ function FullImg({ route }) {
 
   function imgSaved() {
     const index = favData.findIndex(
-      (element) => JSON.stringify(element) === JSON.stringify(item)
+      (element) => JSON.stringify(element) === JSON.stringify(updateItem)
     );
     return index;
   }
@@ -68,7 +68,7 @@ function FullImg({ route }) {
       favData.splice(imgSaved(), 1);
     } else {
       setFavorite(true);
-      favData.push(item);
+      favData.push(updateItem);
     }
     AsyncStorage.setItem("favorites", JSON.stringify(favData));
   };
@@ -103,8 +103,10 @@ function FullImg({ route }) {
         onClick={toggleModal}
         index={itemIndex(item)}
         style={{ justifyContent: "center" }}
-        onChange={(index) => {
+        onChange={ async (index) => {
           setUpdateItem(data[index]);
+          await retrieve();
+          console.log(updateItem, "\n\n", data[index]);
         }}
         onSwipeDown={toggleModal}
       />
