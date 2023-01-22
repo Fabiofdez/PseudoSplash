@@ -8,15 +8,34 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+import { SelectList } from "react-native-dropdown-select-list";
 
 import { UNSPLASH_URL } from "@env";
 
 function Home({ navigation }) {
   const [data, setData] = useState([]);
+  const [selected, setSelected] = useState("");
+  const API_URL = `${UNSPLASH_URL}&query=${selected}`;
+
+  const options = [
+    { key: "1", value: "Nature" },
+    { key: "2", value: "Street Photography" },
+    { key: "3", value: "Animals" },
+    { key: "4", value: "People" },
+    { key: "5", value: "Arts & Culture" },
+    { key: "6", value: "Wallpapers" },
+  ];
 
   useEffect(() => {
     fetchRandomImage();
   }, []);
+
+  const makeSelection = (val) => {
+    setSelected(val);
+    setAPI_URL(UNSPLASH_URL + val);
+    setData([]);
+    fetchRandomImage();
+  };
 
   const updateData = () => {
     fetchRandomImage();
@@ -24,7 +43,7 @@ function Home({ navigation }) {
 
   const fetchRandomImage = async () => {
     try {
-      const response = await axios.get(UNSPLASH_URL);
+      const response = await axios.get(API_URL);
       const newData = response.data.map((item) => {
         return {
           id: item.id,
@@ -50,6 +69,11 @@ function Home({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <SelectList
+        setSelected={(val) => makeSelection(val)}
+        data={options}
+        save="value"
+      />
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
