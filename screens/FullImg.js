@@ -6,6 +6,7 @@ import moment from "moment/moment";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 
 function FullImg({ route }) {
   const { item, urls, data } = route.params;
@@ -85,6 +86,7 @@ function FullImg({ route }) {
         presentationStyle="fullScreen"
         animationType="fade"
         style={{ justifyContent: "center" }}
+        searchPlaceholder="Categories"
       >
         <ImageViewer
           imageUrls={urls}
@@ -106,26 +108,27 @@ function FullImg({ route }) {
         onChange={ async (index) => {
           setUpdateItem(data[index]);
           await retrieve();
-          console.log(updateItem, "\n\n", data[index]);
         }}
         onSwipeDown={toggleModal}
       />
       <View style={styles.buttonRow}>
         <Pressable
-          style={[styles.button, { backgroundColor: "#0070e6" }]}
+          style={[styles.button, { backgroundColor: "#12b2e3dd" }]}
           onPress={handleDownload}
         >
-          <Text style={[styles.buttonText, { color: "#fff" }]}>Download</Text>
+          <Text style={[styles.buttonText]}>Download</Text>
         </Pressable>
-        <Pressable
-          style={[
-            styles.button,
-            { backgroundColor: favorite ? "#df4a8980" : "#00000035" },
-          ]}
+        <Pressable 
+          style={[styles.button, { backgroundColor: favorite ? "#97c8cf" : "#6f8fab" }]} 
           onPress={handleFavorite}
         >
-          <Text style={styles.buttonText}>
-            {favorite ? "Saved" : "Favorite"}
+          <Text style={[styles.buttonText, 
+            { 
+              backgroundColor: favorite ? "#97c8cf" : "#d1e6f0",
+              color: favorite ? "#000" : "#4f6f8b"
+            }
+          ]}>
+            { favorite ? "Saved" : "Favorite" }
           </Text>
         </Pressable>
       </View>
@@ -145,18 +148,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignContent: "space-around",
+    alignContent: "space-between",
     width: "100%",
   },
   button: {
     marginVertical: 15,
-    borderRadius: 15,
-    paddingHorizontal: 30,
-    paddingVertical: 12,
+    borderRadius: 50,
+    alignSelf: "center",
+    padding: 3,
   },
   buttonText: {
     fontSize: 20,
     fontWeight: "bold",
+    paddingHorizontal: 28,
+    paddingVertical: 12,
+    borderRadius: 50,
   },
 });
 
