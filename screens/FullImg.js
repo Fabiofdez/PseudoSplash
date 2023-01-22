@@ -8,31 +8,38 @@ import * as MediaLibrary from "expo-media-library";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function FullImg({ route }) {
-  const { item } = route.params;
+  const { item, urls, data } = route.params;
   const [modalState, setModalState] = useState(false);
   const [favorite, setFavorite] = useState(false);
+  const [updateItem, setUpdateItem] = useState(item);
   const toast = useToast();
   let favData = [];
+  const position = 0;
 
   useEffect(() => {
     const retrieve = async () => {
       await getFavorites();
       setFavorite(imgSaved() >= 0);
-    }
+    };
     retrieve();
   }, []);
-  
+
+  function itemIndex(i) {
+    const index = urls.findIndex((element) => element.url === i.img);
+    return index;
+  }
+
   const getFavorites = async () => {
     let favFile = await AsyncStorage.getItem("favorites");
     if (favFile != null) {
       favData = Array.from(JSON.parse(favFile));
     }
   };
-  
+
   const handleDownload = async () => {
     let date = moment().format("YYYYMMDD_hhmmss");
     let fileUri = `${FileSystem.documentDirectory}${date}.png`;
-    
+
     try {
       await MediaLibrary.requestPermissionsAsync();
       await FileSystem.downloadAsync(item.download, fileUri);
@@ -46,14 +53,14 @@ function FullImg({ route }) {
       console.log("Write: ", err);
     }
   };
-  
+
   function imgSaved() {
     const index = favData.findIndex(
       (element) => JSON.stringify(element) === JSON.stringify(item)
     );
     return index;
   }
-  
+
   const handleFavorite = async () => {
     await getFavorites();
     if (imgSaved() >= 0) {
@@ -69,40 +76,46 @@ function FullImg({ route }) {
   const toggleModal = () => {
     setModalState(!modalState);
   };
-  
-  return (  
-    <View style={{ flex: 1, backgroundColor: "#d1e6f0"}} >
-      <Modal 
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#d1e6f0" }}>
+      <Modal
         visible={modalState}
         statusBarTranslucent={true}
         presentationStyle="fullScreen"
         animationType="fade"
         style={{ justifyContent: "center" }}
       >
-        <ImageViewer 
-          imageUrls={[{ url: item.img }]}
+        <ImageViewer
+          imageUrls={urls}
           renderIndicator={() => {}}
           backgroundColor="#606566"
+          index={itemIndex(updateItem)}
           saveToLocalByLongPress={false}
           onClick={toggleModal}
         />
       </Modal>
-      <ImageViewer 
-        imageUrls={[{ url: item.img }]}
+      <ImageViewer
+        imageUrls={urls}
         renderIndicator={() => {}}
         backgroundColor="#f5fcff"
         saveToLocalByLongPress={false}
         onClick={toggleModal}
+        index={itemIndex(item)}
         style={{ justifyContent: "center" }}
+        onChange={(index) => {
+          setUpdateItem(data[index]);
+        }}
+        onSwipeDown={toggleModal}
       />
       <View style={styles.buttonRow}>
-        <Pressable 
+        <Pressable
           style={[styles.button, { backgroundColor: "#0070e6" }]}
           onPress={handleDownload}
         >
           <Text style={[styles.buttonText, { color: "#fff" }]}>Download</Text>
         </Pressable>
-        <Pressable 
+        <Pressable
           style={[
             styles.button,
             { backgroundColor: favorite ? "#df4a8980" : "#00000035" },
@@ -114,9 +127,9 @@ function FullImg({ route }) {
           </Text>
         </Pressable>
       </View>
-      <Text style={styles.info}>Photographer: {item.author}</Text>
+      <Text style={styles.info}>Photographer: {updateItem.author}</Text>
     </View>
-  );  
+  );
 }
 
 const styles = StyleSheet.create({
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   buttonText: {
-    fontSize: 20, 
+    fontSize: 20,
     fontWeight: "bold",
   },
 });

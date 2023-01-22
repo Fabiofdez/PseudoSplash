@@ -23,13 +23,15 @@ export default function App() {
       duration={1500}
     >
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          headerStyle: {backgroundColor: "#d1e6f0"},
-          headerTitleAlign: "center",
-          headerTitleStyle: styles.headerText,
-          headerShadowVisible: false,
-          headerTintColor: "#506475",
-        }}>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: "#d1e6f0" },
+            headerTitleAlign: "center",
+            headerTitleStyle: styles.headerText,
+            headerShadowVisible: false,
+            headerTintColor: "#506475",
+          }}
+        >
           <Stack.Screen
             name="Home"
             component={Home}
@@ -46,14 +48,11 @@ export default function App() {
               ),
             })}
           />
-          <Stack.Screen
-            name="Favorites"
-            component={Favorites}
-          />
+          <Stack.Screen name="Favorites" component={Favorites} />
           <Stack.Screen
             name="FullImg"
             component={FullImg}
-            options={{title: "Image Details"}}
+            options={{ title: "Image Details" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -74,8 +73,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   headerText: {
-    fontSize: 24, 
-    fontWeight: "bold", 
-    color: "#506475"
-  }
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#506475",
+  },
 });

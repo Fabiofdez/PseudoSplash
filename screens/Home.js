@@ -39,6 +39,15 @@ function Home({ navigation }) {
     }
   };
 
+  const urls = () => {
+    const urls = data.map((item) => {
+      return {
+        url: item.img,
+      };
+    });
+    return urls;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -47,10 +56,16 @@ function Home({ navigation }) {
         numColumns={2}
         extraData={data}
         onEndReached={() => updateData()}
-        contentContainerStyle={{paddingVertical: 7}}
+        contentContainerStyle={{ paddingVertical: 7 }}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => navigation.navigate("FullImg", { item: item })}
+            onPress={() =>
+              navigation.navigate("FullImg", {
+                item: item,
+                urls: urls(),
+                data: data,
+              })
+            }
           >
             <Image style={styles.item} source={{ uri: item.img }} />
           </Pressable>

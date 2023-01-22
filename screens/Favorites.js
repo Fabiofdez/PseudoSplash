@@ -13,12 +13,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RefreshControl } from "react-native";
 import { View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import emptyFolder from "../assets/emptyFolder.png"
+import emptyFolder from "../assets/emptyFolder.png";
 
 function Favorites({ navigation }) {
   const [data, setData] = useState([]);
   const isFocused = useIsFocused();
-  
+
   useEffect(() => {
     isFocused && fetchFavorites();
   }, [isFocused]);
@@ -38,18 +38,19 @@ function Favorites({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View height={favEmpty() ? 0:"auto"} alignItems="center">
-        <Image source={emptyFolder} style={[{width: favEmpty() ? 0:"75%"}, styles.emptyImg]}/>
-        <Text style={styles.emptyText}>
-          Nothing Saved Yet
-        </Text>
+      <View height={favEmpty() ? 0 : "auto"} alignItems="center">
+        <Image
+          source={emptyFolder}
+          style={[{ width: favEmpty() ? 0 : "75%" }, styles.emptyImg]}
+        />
+        <Text style={styles.emptyText}>Nothing Saved Yet</Text>
       </View>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
-        contentContainerStyle={{paddingVertical: 7}}
+        contentContainerStyle={{ paddingVertical: 7 }}
         renderItem={({ item }) => (
           <Pressable
             onPress={() => navigation.navigate("FullImg", { item: item })}
@@ -83,16 +84,16 @@ const styles = StyleSheet.create({
   },
   emptyImg: {
     marginTop: "20%",
-    height: undefined, 
-    aspectRatio: 1
+    height: undefined,
+    aspectRatio: 1,
   },
   emptyText: {
     color: "#57728d",
     textAlign: "center",
-    fontWeight: "bold", 
-    fontSize: 25, 
-    opacity: 0.4
-  }
+    fontWeight: "bold",
+    fontSize: 25,
+    opacity: 0.4,
+  },
 });
 
 export default Favorites;
