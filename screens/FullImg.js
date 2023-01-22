@@ -119,17 +119,10 @@ function FullImg({ route }) {
           <Text style={[styles.buttonText]}>Download</Text>
         </Pressable>
         <Pressable 
-          style={[styles.button, { backgroundColor: favorite ? "#97c8cf" : "#6f8fab" }]} 
+          style={styles.button} 
           onPress={handleFavorite}
         >
-          <Text style={[styles.buttonText, 
-            { 
-              backgroundColor: favorite ? "#97c8cf" : "#d1e6f0",
-              color: favorite ? "#000" : "#4f6f8b"
-            }
-          ]}>
-            { favorite ? "Saved" : "Favorite" }
-          </Text>
+          <Ionicons name={ favorite ? "star" : "star-outline"} size={30} color="#506475" />
         </Pressable>
       </View>
       <Text style={styles.info}>Photographer: {updateItem.author}</Text>
@@ -152,16 +145,15 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    marginVertical: 15,
+    marginVertical: 10,
     borderRadius: 50,
     alignSelf: "center",
-    padding: 3,
+    padding: 15,
   },
   buttonText: {
     fontSize: 20,
     fontWeight: "bold",
-    paddingHorizontal: 28,
-    paddingVertical: 12,
+    paddingHorizontal: 10,
     borderRadius: 50,
   },
 });

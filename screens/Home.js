@@ -10,13 +10,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { SelectList } from "react-native-dropdown-select-list";
 
-import { UNSPLASH_URL, UNSPLASH_SEARCH } from "@env";
+import { API_ID } from "@env";
 
 function Home({ navigation }) {
+  const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=10&"
   const [data, setData] = useState([]);
-  const [selected, setSelected] = useState("");
-  const [API_URL, setAPI_URL] = useState(`${UNSPLASH_URL}`);
-  const [query, setQuery] = useState(false);
+  let selected = "";
+  let API_URL = UNSPLASH_URL + API_ID;
 
   const options = [
     { key: "1", value: "Nature" },
@@ -28,18 +28,21 @@ function Home({ navigation }) {
   ];
 
   useEffect(() => {
+    console.log(1, API_URL);
     fetchRandomImage();
   }, []);
 
-  const makeSelection = async (val) => {
-    setSelected(val);
-    setAPI_URL(UNSPLASH_SEARCH + "&query=" + val);
-    setQuery(true);
+  const makeSelection = (val) => {
+    selected = val;
+    API_URL = UNSPLASH_URL + API_ID + "&query="+val;
+    query = true;
     setData([]);
-    await fetchRandomImage();
+    console.log(2, API_URL);
+    fetchRandomImage();
   };
 
   const updateData = () => {
+    API_URL = UNSPLASH_URL + API_ID + "&query="+selected;
     fetchRandomImage();
   };
 
@@ -55,13 +58,8 @@ function Home({ navigation }) {
   const fetchRandomImage = async () => {
     try {
       const response = await axios.get(API_URL);
-      let newData;
-      if (query) {
-        newData = response.data.results.map(funcName);
-      } else {
-        newData = response.data.map(funcName);
-      }
-      setData([...newData]);
+      const newData = response.data.map(funcName);
+      setData([...data, ...newData]);
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +86,7 @@ function Home({ navigation }) {
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
-        onEndReached={() => updateData()}
+        onEndReached={updateData}
         contentContainerStyle={{ paddingVertical: 7 }}
         renderItem={({ item }) => (
           <Pressable
