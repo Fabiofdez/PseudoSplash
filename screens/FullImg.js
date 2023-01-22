@@ -17,7 +17,7 @@ function FullImg({ route }) {
 
   useEffect(() => {
     retrieve();
-  }, []);
+  }, [updateItem]);
   
   const retrieve = async () => {
     await getFavorites();
