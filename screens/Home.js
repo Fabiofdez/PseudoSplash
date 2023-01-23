@@ -91,63 +91,39 @@ function Home({ navigation }) {
     return urls;
   };
 
+  const cancelSearch = () => {
+    setData([...oldData]);
+    setQuery("");
+  };
+
   return (
     <View style={styles.container}>
       <SearchBar
-        containerStyle={{
-          alignContent: "center",
-          width: "100%",
-          backgroundColor: "#d1e6f0",
-          borderBottomWidth: 0,
-          borderTopWidth: 0,
-        }}
-        inputContainerStyle={{
-          position: "relative",
-          backgroundColor: "#508e9488",
-          borderRadius: 50,
-          paddingHorizontal: 10,
-          marginHorizontal: 15,
-        }}
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.searchInput}
+        searchIcon={
+          <Ionicons 
+            name="search" 
+            size={24} 
+            color="#104e54" 
+          />
+        }
+        clearIcon={
+          <Ionicons
+            name="close"
+            color="#104e54"
+            size={24}
+            onPress={cancelSearch}
+          />
+        }
+        inputStyle={{ color: "#104e54" }}
         placeholderTextColor="#104e54"
-        placeholder="Search for images..."
-        searchIcon={{ color: "#104e54", size: 25 }}
+        placeholder="Search images..."
         cursorColor="#306e74"
         onChangeText={setQuery}
         onSubmitEditing={() => handleSearch(query)}
         value={query}
-        onClear={() => setData([...oldData])}
       />
-      <View
-        style={{
-          width: "90%",
-          backgroundColor: "#508e9488",
-          borderBottomWidth: 0,
-          borderTopWidth: 0,
-          flexDirection: "row",
-          padding: 5,
-        }}
-      >
-        <Ionicons
-          name="search"
-          size={20}
-          style={{ padding: 10, color: "#104e54" }}
-        />
-        <TextInput
-          style={{
-            flex: 1,
-            paddingLeft: 5,
-            fontSize: 18,
-            color: "#104e54",
-          }}
-          placeholder="Search images..."
-          placeholderTextColor="#104e54"
-          onChangeText={setQuery}
-          onSubmitEditing={() => handleSearch(query)}
-          value={query}
-          clearButtonMode="always"
-          onClear={() => setData([...oldData])}
-        />
-      </View>
       <TagBar select={makeSelection} selected={selected} />
       <FlatList
         data={data}
@@ -207,6 +183,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     paddingHorizontal: 12,
+  },
+  searchContainer: {
+    alignContent: "center",
+    width: "100%",
+    backgroundColor: "#d1e6f0",
+    borderBottomWidth: 0,
+    borderTopWidth: 0,
+  },
+  searchInput: {
+    position: "relative",
+    backgroundColor: "#508e9488",
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    marginHorizontal: 15,
   },
 });
 
