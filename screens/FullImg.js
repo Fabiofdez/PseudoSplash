@@ -19,12 +19,12 @@ function FullImg({ route }) {
   useEffect(() => {
     retrieve();
   }, [updateItem]);
-  
+
   const retrieve = async () => {
     await getFavorites();
     setFavorite(imgSaved() >= 0);
   };
-  
+
   function itemIndex(i) {
     const index = urls.findIndex((element) => element.url === i.img);
     return index;
@@ -105,7 +105,7 @@ function FullImg({ route }) {
         onClick={toggleModal}
         index={itemIndex(item)}
         style={{ justifyContent: "center" }}
-        onChange={ async (index) => {
+        onChange={async (index) => {
           setUpdateItem(data[index]);
           await retrieve();
         }}
@@ -118,11 +118,12 @@ function FullImg({ route }) {
         >
           <Text style={[styles.buttonText]}>Download</Text>
         </Pressable>
-        <Pressable 
-          style={styles.button} 
-          onPress={handleFavorite}
-        >
-          <Ionicons name={ favorite ? "star" : "star-outline"} size={30} color="#506475" />
+        <Pressable style={styles.button} onPress={handleFavorite}>
+          <Ionicons
+            name={favorite ? "star" : "star-outline"}
+            size={30}
+            color="#506475"
+          />
         </Pressable>
       </View>
       <Text style={styles.info}>Photographer: {updateItem.author}</Text>

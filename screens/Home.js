@@ -6,50 +6,38 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  Text, 
+  Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { SearchBar } from 'react-native-elements';
+import { SearchBar } from "react-native-elements";
 import axios from "axios";
 
 import { API_ID } from "@env";
 
 function Home({ navigation }) {
-  const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=50&"
+  const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=50&";
   const [data, setData] = useState([]);
   const [oldData, setOldData] = useState([]);
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
   let API_URL = UNSPLASH_URL + API_ID;
 
-  /*
-  const options = [
-    { key: "1", value: "Nature" },
-    { key: "2", value: "Street Photography" },
-    { key: "3", value: "Animals" },
-    { key: "4", value: "People" },
-    { key: "5", value: "Arts & Culture" },
-    { key: "6", value: "Wallpapers" },
-  ];*/
-
   useEffect(() => {
     fetchRandomImage();
   }, []);
 
   const makeSelection = async (val) => {
-    console.log(val);
     if (selected === val) {
       setSelected("");
       setData([...oldData]);
       return;
     }
     setSelected(val);
-    API_URL = UNSPLASH_URL + API_ID + "&query="+val;
+    API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     setOldData([...data]);
     try {
       const response = await axios.get(API_URL);
-      const newData = response.data.map(funcName);
+      const newData = response.data.map(getItem);
       setData([...newData]);
     } catch (error) {
       console.log(error);
@@ -57,11 +45,11 @@ function Home({ navigation }) {
   };
 
   const handleSearch = async (val) => {
-    API_URL = UNSPLASH_URL + API_ID + "&query="+val;
+    API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     setOldData([...data]);
     try {
       const response = await axios.get(API_URL);
-      const newData = response.data.map(funcName);
+      const newData = response.data.map(getItem);
       setData([...newData]);
     } catch (error) {
       console.log(error);
@@ -69,24 +57,23 @@ function Home({ navigation }) {
   };
 
   const updateData = () => {
-    API_URL = UNSPLASH_URL + API_ID + "&query="+selected;
-    console.log(selected);
+    API_URL = UNSPLASH_URL + API_ID + "&query=" + selected;
     fetchRandomImage();
   };
 
-  const funcName = (item) => {
+  const getItem = (item) => {
     return {
       id: item.id,
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
-    }
-  }
+    };
+  };
 
   const fetchRandomImage = async () => {
     try {
       const response = await axios.get(API_URL);
-      const newData = response.data.map(funcName);
+      const newData = response.data.map(getItem);
       setData([...data, ...newData]);
     } catch (error) {
       console.log(error);
@@ -105,38 +92,202 @@ function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <SearchBar
-        containerStyle={{width: "100%", backgroundColor: "#d1e6f0"}}
-        inputContainerStyle={{position: "relative", width: "100%", backgroundColor: "#d1e6f0"}}
+        containerStyle={{
+          alignContent: "center",
+          width: "100%",
+          backgroundColor: "#d1e6f0",
+          borderBottomWidth: 0,
+          borderTopWidth: 0,
+        }}
+        inputContainerStyle={{
+          position: "relative",
+          backgroundColor: "#508e9488",
+          borderRadius: 50,
+          paddingHorizontal: 10,
+          marginHorizontal: 15,
+        }}
+        placeholderTextColor="#104e54"
         placeholder="Search for images..."
+        searchIcon={{ color: "#104e54", size: 25 }}
+        cursorColor="#306e74"
         onChangeText={setQuery}
         onSubmitEditing={() => handleSearch(query)}
         value={query}
         onClear={() => setData([...oldData])}
       />
-      <ScrollView 
+      <ScrollView
         style={styles.tagBar}
         horizontal={true}
-        contentContainerStyle={{paddingHorizontal: 10}}
+        contentContainerStyle={{ paddingHorizontal: 10 }}
         showsHorizontalScrollIndicator={false}
       >
-        <Pressable style={styles.tag} onPress={() => makeSelection("Nature")}>
-          <Text style={styles.tagText}>Nature</Text>
-        </Pressable>
-        <Pressable style={styles.tag} onPress={() => makeSelection("Street Photography")}>
-          <Text style={styles.tagText}>Street Photography</Text>
-        </Pressable>
-        <Pressable style={styles.tag} onPress={() => makeSelection("People")}>
-          <Text style={styles.tagText}>People</Text>
-        </Pressable>
-        <Pressable style={styles.tag} onPress={() => makeSelection("Animals")}>
-          <Text style={styles.tagText}>Animals</Text>
-        </Pressable>
-        <Pressable style={styles.tag} onPress={() => makeSelection("Arts & Culture")}>
-          <Text style={styles.tagText}>Arts & Culture</Text>
-        </Pressable>
-        <Pressable style={styles.tag} onPress={() => makeSelection("Wallpapers")}>
-          <Text style={styles.tagText}>Wallpapers</Text>
-        </Pressable>
+        <View
+          style={[
+            styles.tag,
+            { backgroundColor: selected === "Nature" ? "#5ebbc4" : "#508e94" },
+          ]}
+        >
+          <Pressable
+            style={[
+              styles.tag,
+              {
+                backgroundColor:
+                  selected === "Nature" ? "#00000000" : "#d1e6f0",
+              },
+            ]}
+            onPress={() => makeSelection("Nature")}
+          >
+            <Text
+              style={[
+                styles.tagText,
+                { color: selected === "Nature" ? "#000" : "#508e94" },
+              ]}
+            >
+              Nature
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={[
+            styles.tag,
+            {
+              backgroundColor:
+                selected === "Street Photography" ? "#5ebbc4" : "#508e94",
+            },
+          ]}
+        >
+          <Pressable
+            style={[
+              styles.tag,
+              {
+                backgroundColor:
+                  selected === "Street Photography" ? "#00000000" : "#d1e6f0",
+              },
+            ]}
+            onPress={() => makeSelection("Street Photography")}
+          >
+            <Text
+              style={[
+                styles.tagText,
+                {
+                  color: selected === "Street Photography" ? "#000" : "#508e94",
+                },
+              ]}
+            >
+              Street Photography
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={[
+            styles.tag,
+            { backgroundColor: selected === "People" ? "#5ebbc4" : "#508e94" },
+          ]}
+        >
+          <Pressable
+            style={[
+              styles.tag,
+              {
+                backgroundColor:
+                  selected === "People" ? "#00000000" : "#d1e6f0",
+              },
+            ]}
+            onPress={() => makeSelection("People")}
+          >
+            <Text
+              style={[
+                styles.tagText,
+                { color: selected === "People" ? "#000" : "#508e94" },
+              ]}
+            >
+              People
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={[
+            styles.tag,
+            { backgroundColor: selected === "Animals" ? "#5ebbc4" : "#508e94" },
+          ]}
+        >
+          <Pressable
+            style={[
+              styles.tag,
+              {
+                backgroundColor:
+                  selected === "Animals" ? "#00000000" : "#d1e6f0",
+              },
+            ]}
+            onPress={() => makeSelection("Animals")}
+          >
+            <Text
+              style={[
+                styles.tagText,
+                { color: selected === "Animals" ? "#000" : "#508e94" },
+              ]}
+            >
+              Animals
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={[
+            styles.tag,
+            {
+              backgroundColor:
+                selected === "Arts & Culture" ? "#5ebbc4" : "#508e94",
+            },
+          ]}
+        >
+          <Pressable
+            style={[
+              styles.tag,
+              {
+                backgroundColor:
+                  selected === "Arts & Culture" ? "#00000000" : "#d1e6f0",
+              },
+            ]}
+            onPress={() => makeSelection("Arts & Culture")}
+          >
+            <Text
+              style={[
+                styles.tagText,
+                { color: selected === "Arts & Culture" ? "#000" : "#508e94" },
+              ]}
+            >
+              Arts & Culture
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={[
+            styles.tag,
+            {
+              backgroundColor:
+                selected === "Wallpapers" ? "#5ebbc4" : "#508e94",
+            },
+          ]}
+        >
+          <Pressable
+            style={[
+              styles.tag,
+              {
+                backgroundColor:
+                  selected === "Wallpapers" ? "#00000000" : "#d1e6f0",
+              },
+            ]}
+            onPress={() => makeSelection("Wallpapers")}
+          >
+            <Text
+              style={[
+                styles.tagText,
+                { color: selected === "Wallpapers" ? "#000" : "#508e94" },
+              ]}
+            >
+              Wallpapers
+            </Text>
+          </Pressable>
+        </View>
       </ScrollView>
       <FlatList
         data={data}
@@ -179,25 +330,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   tagBar: {
-    minHeight: "6.5%",
-    maxHeight: "6.5%",
-    paddingTop: 8,
+    minHeight: "6%",
+    maxHeight: "6%",
+    paddingVertical: "1.5%",
     width: "100%",
     flexWrap: "wrap",
     backgroundColor: "#d1e6f0",
   },
-  tag: { 
-    backgroundColor: "#40a7b369", 
-    borderRadius: 50, 
+  tag: {
+    borderRadius: 50,
     justifyContent: "center",
-    marginHorizontal: 4,
-    paddingVertical: 2,
+    marginHorizontal: 3,
+    paddingVertical: 3,
   },
   tagText: {
-    fontSize: 15,
-    paddingHorizontal: 18, 
-    paddingVertical: 5
-  }
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingHorizontal: 12,
+  },
 });
 
 export default Home;
