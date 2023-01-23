@@ -12,27 +12,18 @@ export default class Tag extends Component {
       <View
         style={[
           styles.tag,
-          {
-            backgroundColor: active ? "#5ebbc4" : "#508e94",
-          },
+          { backgroundColor: active ? "#5ebbc4" : "#508e94" },
         ]}
       >
         <Pressable
           style={[
             styles.tag,
-            {
-              backgroundColor: active ? "#00000000" : "#d1e6f0",
-            },
+            { backgroundColor: active ? "#00000000" : "#d1e6f0" },
           ]}
           onPress={this.props.onPress}
         >
           <Text
-            style={[
-              styles.tagText,
-              {
-                color: active ? "#000" : "#508e94",
-              },
-            ]}
+            style={[styles.tagText, { color: active ? "#000" : "#508e94" }]}
           >
             {this.props.label}
           </Text>
