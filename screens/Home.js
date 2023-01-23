@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { SearchBar } from 'react-native-elements';
 import axios from "axios";
 
 import { API_ID } from "@env";
@@ -25,6 +26,7 @@ function Home({ navigation }) {
   }, []);
 
   const makeSelection = async (val) => {
+    console.log(val);
     if (selected === val) {
       val = "";
     }
@@ -32,7 +34,7 @@ function Home({ navigation }) {
     API_URL = UNSPLASH_URL + API_ID + "&query="+val;
     setData([]);
     try {
-      const response = await axios.get(API_URL);
+      //const response = await axios.get(API_URL);
       const newData = response.data.map(funcName);
       setData([...newData]);
     } catch (error) {
@@ -57,7 +59,7 @@ function Home({ navigation }) {
 
   const fetchRandomImage = async () => {
     try {
-      const response = await axios.get(API_URL);
+      //const response = await axios.get(API_URL);
       const newData = response.data.map(funcName);
       setData([...data, ...newData]);
     } catch (error) {
@@ -76,6 +78,13 @@ function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <SearchBar
+        containerStyle={{width: "100%", backgroundColor: "#d1e6f0"}}
+        inputContainerStyle={{position: "relative", width: "100%", backgroundColor: "#d1e6f0"}}
+        placeholder="Search for images..."
+        onChangeText={makeSelection}
+        value={selected}
+      />
       <ScrollView 
         style={styles.tagBar}
         horizontal={true}
