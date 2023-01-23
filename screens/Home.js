@@ -6,12 +6,15 @@ import {
   Image,
   Dimensions,
   View,
+  TextInput,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import axios from "axios";
 
 import { API_ID } from "@env";
 import TagBar from "../components/TagBar";
+import { Ionicons } from "@expo/vector-icons";
+import { color } from "react-native-elements/dist/helpers";
 
 function Home({ navigation }) {
   const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=50&";
@@ -114,7 +117,38 @@ function Home({ navigation }) {
         value={query}
         onClear={() => setData([...oldData])}
       />
-      <TagBar select={makeSelection} selected={selected}/>
+      <View
+        style={{
+          width: "90%",
+          backgroundColor: "#508e9488",
+          borderBottomWidth: 0,
+          borderTopWidth: 0,
+          flexDirection: "row",
+          padding: 5,
+        }}
+      >
+        <Ionicons
+          name="search"
+          size={20}
+          style={{ padding: 10, color: "#104e54" }}
+        />
+        <TextInput
+          style={{
+            flex: 1,
+            paddingLeft: 5,
+            fontSize: 18,
+            color: "#104e54",
+          }}
+          placeholder="Search images..."
+          placeholderTextColor="#104e54"
+          onChangeText={setQuery}
+          onSubmitEditing={() => handleSearch(query)}
+          value={query}
+          clearButtonMode="always"
+          onClear={() => setData([...oldData])}
+        />
+      </View>
+      <TagBar select={makeSelection} selected={selected} />
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
