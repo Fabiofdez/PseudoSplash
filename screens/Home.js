@@ -25,6 +25,9 @@ function Home({ navigation }) {
   }, []);
 
   const makeSelection = async (val) => {
+    if (selected === val) {
+      return;
+    }
     setSelected(val);
     API_URL = UNSPLASH_URL + API_ID + "&query="+val;
     setData([]);
