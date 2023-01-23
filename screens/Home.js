@@ -16,10 +16,11 @@ import axios from "axios";
 import { API_ID } from "@env";
 
 function Home({ navigation }) {
-  const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=10&"
+  const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=50&"
   const [data, setData] = useState([]);
   const [oldData, setOldData] = useState([]);
   const [selected, setSelected] = useState("");
+  const [query, setQuery] = useState("");
   let API_URL = UNSPLASH_URL + API_ID;
 
   /*
@@ -44,6 +45,18 @@ function Home({ navigation }) {
       return;
     }
     setSelected(val);
+    API_URL = UNSPLASH_URL + API_ID + "&query="+val;
+    setOldData([...data]);
+    try {
+      const response = await axios.get(API_URL);
+      const newData = response.data.map(funcName);
+      setData([...newData]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearch = async (val) => {
     API_URL = UNSPLASH_URL + API_ID + "&query="+val;
     setOldData([...data]);
     try {
@@ -95,9 +108,9 @@ function Home({ navigation }) {
         containerStyle={{width: "100%", backgroundColor: "#d1e6f0"}}
         inputContainerStyle={{position: "relative", width: "100%", backgroundColor: "#d1e6f0"}}
         placeholder="Search for images..."
-        onChangeText={setSelected}
-        onSubmitEditing={() => makeSelection(selected)}
-        value={selected}
+        onChangeText={setQuery}
+        onSubmitEditing={() => handleSearch(query)}
+        value={query}
         onClear={() => setData([...oldData])}
       />
       <ScrollView 
