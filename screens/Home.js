@@ -5,14 +5,13 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  ScrollView,
-  Text,
   View,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import axios from "axios";
 
 import { API_ID } from "@env";
+import TagBar from "../components/TagBar";
 
 function Home({ navigation }) {
   const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=50&";
@@ -115,180 +114,7 @@ function Home({ navigation }) {
         value={query}
         onClear={() => setData([...oldData])}
       />
-      <ScrollView
-        style={styles.tagBar}
-        horizontal={true}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-        showsHorizontalScrollIndicator={false}
-      >
-        <View
-          style={[
-            styles.tag,
-            { backgroundColor: selected === "Nature" ? "#5ebbc4" : "#508e94" },
-          ]}
-        >
-          <Pressable
-            style={[
-              styles.tag,
-              {
-                backgroundColor:
-                  selected === "Nature" ? "#00000000" : "#d1e6f0",
-              },
-            ]}
-            onPress={() => makeSelection("Nature")}
-          >
-            <Text
-              style={[
-                styles.tagText,
-                { color: selected === "Nature" ? "#000" : "#508e94" },
-              ]}
-            >
-              Nature
-            </Text>
-          </Pressable>
-        </View>
-        <View
-          style={[
-            styles.tag,
-            {
-              backgroundColor:
-                selected === "Street Photography" ? "#5ebbc4" : "#508e94",
-            },
-          ]}
-        >
-          <Pressable
-            style={[
-              styles.tag,
-              {
-                backgroundColor:
-                  selected === "Street Photography" ? "#00000000" : "#d1e6f0",
-              },
-            ]}
-            onPress={() => makeSelection("Street Photography")}
-          >
-            <Text
-              style={[
-                styles.tagText,
-                {
-                  color: selected === "Street Photography" ? "#000" : "#508e94",
-                },
-              ]}
-            >
-              Street Photography
-            </Text>
-          </Pressable>
-        </View>
-        <View
-          style={[
-            styles.tag,
-            { backgroundColor: selected === "People" ? "#5ebbc4" : "#508e94" },
-          ]}
-        >
-          <Pressable
-            style={[
-              styles.tag,
-              {
-                backgroundColor:
-                  selected === "People" ? "#00000000" : "#d1e6f0",
-              },
-            ]}
-            onPress={() => makeSelection("People")}
-          >
-            <Text
-              style={[
-                styles.tagText,
-                { color: selected === "People" ? "#000" : "#508e94" },
-              ]}
-            >
-              People
-            </Text>
-          </Pressable>
-        </View>
-        <View
-          style={[
-            styles.tag,
-            { backgroundColor: selected === "Animals" ? "#5ebbc4" : "#508e94" },
-          ]}
-        >
-          <Pressable
-            style={[
-              styles.tag,
-              {
-                backgroundColor:
-                  selected === "Animals" ? "#00000000" : "#d1e6f0",
-              },
-            ]}
-            onPress={() => makeSelection("Animals")}
-          >
-            <Text
-              style={[
-                styles.tagText,
-                { color: selected === "Animals" ? "#000" : "#508e94" },
-              ]}
-            >
-              Animals
-            </Text>
-          </Pressable>
-        </View>
-        <View
-          style={[
-            styles.tag,
-            {
-              backgroundColor:
-                selected === "Arts & Culture" ? "#5ebbc4" : "#508e94",
-            },
-          ]}
-        >
-          <Pressable
-            style={[
-              styles.tag,
-              {
-                backgroundColor:
-                  selected === "Arts & Culture" ? "#00000000" : "#d1e6f0",
-              },
-            ]}
-            onPress={() => makeSelection("Arts & Culture")}
-          >
-            <Text
-              style={[
-                styles.tagText,
-                { color: selected === "Arts & Culture" ? "#000" : "#508e94" },
-              ]}
-            >
-              Arts & Culture
-            </Text>
-          </Pressable>
-        </View>
-        <View
-          style={[
-            styles.tag,
-            {
-              backgroundColor:
-                selected === "Wallpapers" ? "#5ebbc4" : "#508e94",
-            },
-          ]}
-        >
-          <Pressable
-            style={[
-              styles.tag,
-              {
-                backgroundColor:
-                  selected === "Wallpapers" ? "#00000000" : "#d1e6f0",
-              },
-            ]}
-            onPress={() => makeSelection("Wallpapers")}
-          >
-            <Text
-              style={[
-                styles.tagText,
-                { color: selected === "Wallpapers" ? "#000" : "#508e94" },
-              ]}
-            >
-              Wallpapers
-            </Text>
-          </Pressable>
-        </View>
-      </ScrollView>
+      <TagBar select={makeSelection} selected={selected}/>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
