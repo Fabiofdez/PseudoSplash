@@ -18,8 +18,19 @@ import { API_ID } from "@env";
 function Home({ navigation }) {
   const UNSPLASH_URL = "https://api.unsplash.com/photos/random?count=10&"
   const [data, setData] = useState([]);
+  const [oldData, setOldData] = useState([]);
   const [selected, setSelected] = useState("");
   let API_URL = UNSPLASH_URL + API_ID;
+
+  /*
+  const options = [
+    { key: "1", value: "Nature" },
+    { key: "2", value: "Street Photography" },
+    { key: "3", value: "Animals" },
+    { key: "4", value: "People" },
+    { key: "5", value: "Arts & Culture" },
+    { key: "6", value: "Wallpapers" },
+  ];*/
 
   useEffect(() => {
     fetchRandomImage();
@@ -28,13 +39,15 @@ function Home({ navigation }) {
   const makeSelection = async (val) => {
     console.log(val);
     if (selected === val) {
-      val = "";
+      setSelected("");
+      setData([...oldData]);
+      return;
     }
     setSelected(val);
     API_URL = UNSPLASH_URL + API_ID + "&query="+val;
-    setData([]);
+    setOldData([...data]);
     try {
-      //const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL);
       const newData = response.data.map(funcName);
       setData([...newData]);
     } catch (error) {
@@ -59,7 +72,7 @@ function Home({ navigation }) {
 
   const fetchRandomImage = async () => {
     try {
-      //const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL);
       const newData = response.data.map(funcName);
       setData([...data, ...newData]);
     } catch (error) {
@@ -82,18 +95,34 @@ function Home({ navigation }) {
         containerStyle={{width: "100%", backgroundColor: "#d1e6f0"}}
         inputContainerStyle={{position: "relative", width: "100%", backgroundColor: "#d1e6f0"}}
         placeholder="Search for images..."
-        onChangeText={makeSelection}
+        onChangeText={setSelected}
+        onSubmitEditing={() => makeSelection(selected)}
         value={selected}
+        onClear={() => setData([...oldData])}
       />
       <ScrollView 
         style={styles.tagBar}
         horizontal={true}
+        contentContainerStyle={{paddingHorizontal: 10}}
+        showsHorizontalScrollIndicator={false}
       >
         <Pressable style={styles.tag} onPress={() => makeSelection("Nature")}>
-          <Text style={{paddingHorizontal: 18, paddingVertical: 5}}>Nature</Text>
+          <Text style={styles.tagText}>Nature</Text>
+        </Pressable>
+        <Pressable style={styles.tag} onPress={() => makeSelection("Street Photography")}>
+          <Text style={styles.tagText}>Street Photography</Text>
         </Pressable>
         <Pressable style={styles.tag} onPress={() => makeSelection("People")}>
-          <Text style={{paddingHorizontal: 18, paddingVertical: 5}}>People</Text>
+          <Text style={styles.tagText}>People</Text>
+        </Pressable>
+        <Pressable style={styles.tag} onPress={() => makeSelection("Animals")}>
+          <Text style={styles.tagText}>Animals</Text>
+        </Pressable>
+        <Pressable style={styles.tag} onPress={() => makeSelection("Arts & Culture")}>
+          <Text style={styles.tagText}>Arts & Culture</Text>
+        </Pressable>
+        <Pressable style={styles.tag} onPress={() => makeSelection("Wallpapers")}>
+          <Text style={styles.tagText}>Wallpapers</Text>
         </Pressable>
       </ScrollView>
       <FlatList
@@ -137,17 +166,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   tagBar: {
-    width: "100%", 
-    maxHeight: "5%",
+    minHeight: "6.5%",
+    maxHeight: "6.5%",
+    paddingTop: 8,
+    width: "100%",
+    flexWrap: "wrap",
     backgroundColor: "#d1e6f0",
-    paddingBottom: 8
   },
   tag: { 
-    backgroundColor: "#00ffff", 
+    backgroundColor: "#40a7b369", 
     borderRadius: 50, 
     justifyContent: "center",
-    margin: "auto",
-    marginHorizontal: 4
+    marginHorizontal: 4,
+    paddingVertical: 2,
+  },
+  tagText: {
+    fontSize: 15,
+    paddingHorizontal: 18, 
+    paddingVertical: 5
   }
 });
 
