@@ -52,7 +52,7 @@ function InAppContainer() {
           <Stack.Screen
             name="FullImg"
             component={FullImg}
-            options={{ title: "Image Details" }}
+            options={{ title: "Image View" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#506475",
   },

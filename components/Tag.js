@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { StyleSheet, Pressable, Text, View } from "react-native";
+import { StyleSheet, Pressable, Text } from "react-native";
 
 export default class Tag extends Component {
   constructor(props) {
@@ -8,37 +8,33 @@ export default class Tag extends Component {
 
   render() {
     const active = this.props.isActive;
+    const fillColor = active ? "#5ebbc4" : "#d1e6f0";
+    const borderColor = active ? "#5ebbc4" : "#508e94";
+    const labelColor = active ? "#000" : "#408086";
     return (
-      <View
+      <Pressable
         style={[
           styles.tag,
-          { backgroundColor: active ? "#5ebbc4" : "#508e94" },
+          { backgroundColor: fillColor, borderColor: borderColor },
         ]}
+        onPress={this.props.onPress}
       >
-        <Pressable
-          style={[
-            styles.tag,
-            { backgroundColor: active ? "#00000000" : "#d1e6f0" },
-          ]}
-          onPress={this.props.onPress}
-        >
-          <Text
-            style={[styles.tagText, { color: active ? "#000" : "#508e94" }]}
-          >
-            {this.props.label}
-          </Text>
-        </Pressable>
-      </View>
+        <Text style={[styles.tagText, { color: labelColor }]}>
+          {this.props.label}
+        </Text>
+      </Pressable>
     );
   }
 }
 
 const styles = StyleSheet.create({
   tag: {
-    borderRadius: 50,
+    flex: 2,
+    borderRadius: 100,
+    borderColor: "#508e94",
+    borderWidth: 2.5,
     justifyContent: "center",
     marginHorizontal: 3,
-    paddingVertical: 3,
   },
   tagText: {
     fontWeight: "bold",
