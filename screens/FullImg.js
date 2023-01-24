@@ -81,6 +81,7 @@ function FullImg({ route }) {
   };
 
   const showInfo = () => {
+    console.log("toggle info");
     setInfo(!info);
   };
 
@@ -131,8 +132,8 @@ function FullImg({ route }) {
           <MapView
             style={{ height: "50%", width: "100%", alignSelf: "center", borderRadius: 30, display: updateItem.latitude ? "flex" : "none" }}
             initialRegion={{
-              latitude: updateItem.latitude,
-              longitude: updateItem.longitude,
+              latitude: updateItem.latitude || 1,
+              longitude: updateItem.longitude || 1,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}

@@ -29,7 +29,7 @@ function Favorites({ navigation }) {
   const fetchFavorites = async () => {
     try {
       const favFile = await AsyncStorage.getItem("favorites");
-      setData(Array.from(JSON.parse(favFile)));
+      setData(Array.from(JSON.parse(favFile || "[]")));
     } catch (error) {
       console.log(error);
     }

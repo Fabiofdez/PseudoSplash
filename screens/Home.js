@@ -23,11 +23,11 @@ function Home({ navigation }) {
   let API_URL = UNSPLASH_URL + API_ID;
 
   useEffect(() => {
-    fetchRandomImage("");
+    fetchNew("");
   }, []);
 
   const updateData = () => {
-    fetchRandomImage(query || selected);
+    fetchMore(query || selected);
   };
 
   const getItem = (item) => {
@@ -36,8 +36,8 @@ function Home({ navigation }) {
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
-      latitude: item.location.position.latitude || "not available",
-      longitude: item.location.position.longitude || "not available",
+      latitude: item.location.position.latitude || 0,
+      longitude: item.location.position.longitude || 0,
       created: item.created_at,
       tags: item.tags,
       updated: item.updated_at,
@@ -67,10 +67,9 @@ function Home({ navigation }) {
 
   const fetchNew = async (val) => {
     setData([]);
-    console.log(val);
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
-      const response = await axios.get(API_URL);
+      // const response = await axios.get(API_URL);
       const newData = response.data.map(getItem);
       setData([...newData]);
     } catch (error) {
@@ -78,11 +77,10 @@ function Home({ navigation }) {
     }
   };
 
-  const fetchRandomImage = async (val) => {
-    console.log(val);
+  const fetchMore = async (val) => {
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
-      const response = await axios.get(API_URL);
+      // const response = await axios.get(API_URL);
       const newData = response.data.map(getItem);
       setData([...data, ...newData]);
     } catch (error) {
