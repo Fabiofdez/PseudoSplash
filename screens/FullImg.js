@@ -123,17 +123,17 @@ function FullImg({ route }) {
             >
             <Text>Close</Text>
           </Pressable>
-          <Text>
-            {"Description: " + updateItem.description}
-            {"\nCreated at: " + updateItem.created}
-            {"\nUpdated at: " + updateItem.updated}
-            {"\nTags: " + updateItem.tags}
+          <Text style={{fontSize: 15, color: "#12b2e3dd"}}>
+            {updateItem.description ? "Description: " + updateItem.description : ""}
+            {updateItem.created ? "\nCreated at: " + updateItem.created : ""}
+            {updateItem.updated ? "\nUpdated at: " + updateItem.updated : ""}
+            {updateItem.tags ? "\nTags: " + updateItem.tags: ""}
           </Text>
           <MapView
             style={{ height: "50%", width: "100%", alignSelf: "center", borderRadius: 30, display: updateItem.latitude ? "flex" : "none" }}
             initialRegion={{
-              latitude: updateItem.latitude || 1,
-              longitude: updateItem.longitude || 1,
+              latitude: updateItem.latitude,
+              longitude: updateItem.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
@@ -163,7 +163,7 @@ function FullImg({ route }) {
       />
       <View style={styles.buttonRow}>
         <Pressable
-          style={[styles.button, { backgroundColor: "#12b2e3dd" }]}
+          style={[styles.button, { backgroundColor: "#4e8291" }]}
           onPress={handleDownload}
         >
           <Text style={[styles.buttonText]}>Download</Text>

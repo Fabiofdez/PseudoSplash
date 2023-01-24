@@ -36,8 +36,8 @@ function Home({ navigation }) {
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
-      latitude: item.location.position.latitude || 0,
-      longitude: item.location.position.longitude || 0,
+      latitude: item.location.position.latitude,
+      longitude: item.location.position.longitude,
       created: item.created_at,
       tags: item.tags,
       updated: item.updated_at,
@@ -69,7 +69,7 @@ function Home({ navigation }) {
     setData([]);
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
-      // const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL);
       const newData = response.data.map(getItem);
       setData([...newData]);
     } catch (error) {
@@ -80,7 +80,7 @@ function Home({ navigation }) {
   const fetchMore = async (val) => {
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
-      // const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL);
       const newData = response.data.map(getItem);
       setData([...data, ...newData]);
     } catch (error) {
