@@ -7,12 +7,14 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import MapView, { Marker } from "react-native-maps";
 
 function FullImg({ route }) {
   const { item, urls, data } = route.params;
   const [modalState, setModalState] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [updateItem, setUpdateItem] = useState(item);
+  const [info, setInfo] = useState(false);
   const toast = useToast();
   let favData = [];
 
@@ -78,6 +80,10 @@ function FullImg({ route }) {
     setModalState(!modalState);
   };
 
+  const showInfo = () => {
+    setInfo(!info);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#d1e6f0" }}>
       <Modal
@@ -97,6 +103,49 @@ function FullImg({ route }) {
           onClick={toggleModal}
         />
       </Modal>
+      <Modal
+        visible={info}
+        statusBarTranslucent={true}
+        presentationStyle="fullScreen"
+        animationType="fade"
+        style={{ justifyContent: "center" }}
+        >
+          <Pressable
+            onPress={showInfo}
+            style={{
+              backgroundColor: "#12b2e3dd",
+              padding: 10,
+              borderRadius: 10,
+              alignSelf: "flex-end",
+              margin: 50,
+            }}
+            >
+            <Text>Close</Text>
+          </Pressable>
+          <Text>
+            {"Description: " + updateItem.description}
+            {"\nCreated at: " + updateItem.created}
+            {"\nUpdated at: " + updateItem.updated}
+            {"\nTags: " + updateItem.tags}
+          </Text>
+          <MapView
+            style={{ height: "50%", width: "100%", alignSelf: "center", borderRadius: 30, display: updateItem.latitude ? "flex" : "none" }}
+            initialRegion={{
+              latitude: updateItem.latitude,
+              longitude: updateItem.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: updateItem.latitude,
+                longitude: updateItem.longitude,
+              }}
+              title={updateItem.title}
+            />
+          </MapView>
+        </Modal>
       <ImageViewer
         imageUrls={urls}
         renderIndicator={() => {}}
@@ -124,6 +173,13 @@ function FullImg({ route }) {
             size={30}
             color="#506475"
           />
+        </Pressable>
+        <Pressable
+          style={[styles.button, { backgroundColor: "#4e8291" }]}
+          onPress={showInfo}>
+          <Text style={styles.buttonText}>
+                More Info
+          </Text>
         </Pressable>
       </View>
       <Text style={styles.info}>Photographer: {updateItem.author}</Text>

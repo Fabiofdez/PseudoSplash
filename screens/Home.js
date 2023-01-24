@@ -36,6 +36,12 @@ function Home({ navigation }) {
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
+      latitude: item.location.position.latitude || "not available",
+      longitude: item.location.position.longitude || "not available",
+      created: item.created_at,
+      tags: item.tags,
+      updated: item.updated_at,
+      description: item.alt_description,
     };
   };
 
@@ -60,6 +66,7 @@ function Home({ navigation }) {
   };
 
   const fetchNew = async (val) => {
+    setData([]);
     console.log(val);
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
