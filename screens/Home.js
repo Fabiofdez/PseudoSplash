@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FlatList,
   Pressable,
@@ -20,14 +20,15 @@ function Home({ navigation }) {
   const [oldData, setOldData] = useState([]);
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
+  const imgList = useRef();
   let API_URL = UNSPLASH_URL + API_ID;
 
   useEffect(() => {
-    fetch("", false);
+    fetch("", true);
   }, []);
 
   const updateData = () => {
-    fetch(query || selected, true);
+    fetch(query || selected, false);
   };
 
   const getItem = (item) => {
@@ -38,14 +39,15 @@ function Home({ navigation }) {
       download: item.links.download,
       latitude: item.location.position.latitude || 1,
       longitude: item.location.position.longitude || 1,
-      created: item.created_at,
+      created: new Date(item.created_at).toUTCString(),
       tags: item.tags,
-      updated: item.updated_at,
+      updated: new Date(item.updated_at).toUTCString(),
       description: item.alt_description,
     };
   };
 
   const makeSelection = async (val) => {
+    imgList.current.scrollToOffset({animated: false, offset: 0});
     if (selected === val) {
       setSelected("");
       setData([...oldData]);
@@ -56,24 +58,25 @@ function Home({ navigation }) {
     }
     setQuery("");
     setSelected(val);
-    fetch(val, false);
+    fetch(val, true);
   };
 
   const handleSearch = async (val) => {
     setSelected("");
     setOldData([...data]);
-    fetch(val, false);
+    fetch(val, true);
   };
 
-  const fetch = async (val, refresh) => {
+  const fetch = async (val, renew) => {
+    renew ? setData([]) : setData(data); 
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
       const response = await axios.get(API_URL);
       const newData = response.data.map(getItem);
-      if (refresh) {
-        setData([...data, ...newData]);
-      } else {
+      if (renew) {
         setData([...newData]);
+      } else {
+        setData([...data, ...newData]);
       }
     } catch (error) {
       console.log(error);
@@ -119,6 +122,7 @@ function Home({ navigation }) {
       />
       <TagBar select={makeSelection} selected={selected} height="7%" />
       <FlatList
+        ref={imgList}
         data={data}
         keyExtractor={(item) => item.id}
         numColumns={2}
@@ -138,7 +142,7 @@ function Home({ navigation }) {
             <Image style={styles.item} source={{ uri: item.img }} />
           </Pressable>
         )}
-        onRefresh={() => fetch(query || selected, false)}
+        onRefresh={() => fetch(query || selected, true)}
         refreshing={false}
       />
     </View>
