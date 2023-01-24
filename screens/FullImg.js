@@ -81,7 +81,7 @@ function FullImg({ route }) {
   };
 
   const showInfo = () => {
-    console.log("toggle info");
+    console.log(updateItem.latitude, ", ", updateItem.longitude);
     setInfo(!info);
   };
 
@@ -108,29 +108,44 @@ function FullImg({ route }) {
         visible={info}
         statusBarTranslucent={true}
         presentationStyle="fullScreen"
-        animationType="fade"
+        animationType="slide"
         style={{ justifyContent: "center" }}
+      >
+        <Pressable
+          onPress={showInfo}
+          style={{
+            backgroundColor: "#12b2e3dd",
+            padding: 10,
+            borderRadius: 10,
+            alignSelf: "flex-end",
+            margin: 50,
+          }}
         >
-          <Pressable
-            onPress={showInfo}
-            style={{
-              backgroundColor: "#12b2e3dd",
-              padding: 10,
-              borderRadius: 10,
-              alignSelf: "flex-end",
-              margin: 50,
-            }}
-            >
-            <Text>Close</Text>
-          </Pressable>
-          <Text style={{fontSize: 15, color: "#12b2e3dd"}}>
-            {updateItem.description ? "Description: " + updateItem.description : ""}
-            {updateItem.created ? "\nCreated at: " + updateItem.created : ""}
-            {updateItem.updated ? "\nUpdated at: " + updateItem.updated : ""}
-            {updateItem.tags ? "\nTags: " + updateItem.tags: ""}
-          </Text>
+          <Text>Close</Text>
+        </Pressable>
+        <Text style={{ fontSize: 15, color: "#12b2e3dd" }}>
+          {updateItem.description
+            ? "Description: " + updateItem.description
+            : ""}
+          {updateItem.created ? "\nCreated at: " + updateItem.created : ""}
+          {updateItem.updated ? "\nUpdated at: " + updateItem.updated : ""}
+          {updateItem.tags ? "\nTags: " + updateItem.tags : ""}
+        </Text>
+        <View
+          style={{
+            opacity: updateItem.latitude !== 1 ? 100 : 0,
+            borderRadius: 25,
+            overflow: "hidden",
+            margin: "5%",
+          }}
+        >
           <MapView
-            style={{ height: "50%", width: "100%", alignSelf: "center", borderRadius: 30, display: updateItem.latitude ? "flex" : "none" }}
+            style={{
+              height: undefined,
+              width: "100%",
+              aspectRatio: 1,
+              alignSelf: "center",
+            }}
             initialRegion={{
               latitude: updateItem.latitude,
               longitude: updateItem.longitude,
@@ -144,9 +159,22 @@ function FullImg({ route }) {
                 longitude: updateItem.longitude,
               }}
               title={updateItem.title}
-            />
+            >
+              <Ionicons
+                style={{
+                  opacity:
+                    updateItem.latitude === 1 && updateItem.longitude === 1
+                      ? 0
+                      : 100,
+                }}
+                name="location-sharp"
+                size={50}
+                color="#256"
+              />
+            </Marker>
           </MapView>
-        </Modal>
+        </View>
+      </Modal>
       <ImageViewer
         imageUrls={urls}
         renderIndicator={() => {}}
@@ -177,10 +205,9 @@ function FullImg({ route }) {
         </Pressable>
         <Pressable
           style={[styles.button, { backgroundColor: "#4e8291" }]}
-          onPress={showInfo}>
-          <Text style={styles.buttonText}>
-                More Info
-          </Text>
+          onPress={showInfo}
+        >
+          <Text style={styles.buttonText}>More Info</Text>
         </Pressable>
       </View>
       <Text style={styles.info}>Photographer: {updateItem.author}</Text>

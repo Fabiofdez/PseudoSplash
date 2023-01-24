@@ -23,11 +23,11 @@ function Home({ navigation }) {
   let API_URL = UNSPLASH_URL + API_ID;
 
   useEffect(() => {
-    fetchNew("");
+    fetch("", false);
   }, []);
 
   const updateData = () => {
-    fetchMore(query || selected);
+    fetch(query || selected, true);
   };
 
   const getItem = (item) => {
@@ -36,8 +36,8 @@ function Home({ navigation }) {
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
-      latitude: item.location.position.latitude,
-      longitude: item.location.position.longitude,
+      latitude: item.location.position.latitude || 1,
+      longitude: item.location.position.longitude || 1,
       created: item.created_at,
       tags: item.tags,
       updated: item.updated_at,
@@ -56,33 +56,25 @@ function Home({ navigation }) {
     }
     setQuery("");
     setSelected(val);
-    fetchNew(val);
+    fetch(val, false);
   };
 
   const handleSearch = async (val) => {
     setSelected("");
     setOldData([...data]);
-    fetchNew(val);
+    fetch(val, false);
   };
 
-  const fetchNew = async (val) => {
-    setData([]);
+  const fetch = async (val, refresh) => {
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
       const response = await axios.get(API_URL);
       const newData = response.data.map(getItem);
-      setData([...newData]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchMore = async (val) => {
-    API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
-    try {
-      const response = await axios.get(API_URL);
-      const newData = response.data.map(getItem);
-      setData([...data, ...newData]);
+      if (refresh) {
+        setData([...data, ...newData]);
+      } else {
+        setData([...newData]);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -146,7 +138,7 @@ function Home({ navigation }) {
             <Image style={styles.item} source={{ uri: item.img }} />
           </Pressable>
         )}
-        onRefresh={() => fetchNew(query || selected)}
+        onRefresh={() => fetch(query || selected, false)}
         refreshing={false}
       />
     </View>
