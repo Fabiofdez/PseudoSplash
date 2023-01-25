@@ -91,6 +91,63 @@ function FullImg({ route }) {
     setInfo(!info);
   };
 
+  const infoContainer = (<View
+    style={{
+      backgroundColor: "#508e9477",
+      borderRadius: 35,
+      padding: 25,
+      marginBottom: "5%",
+    }}
+  >
+    {updateItem.description ? (
+      <View style={{ flexDirection: "row", marginBottom: 18 }}>
+        <Ionicons
+          name={"document-text"}
+          size={30}
+          color="#104e54"
+          style={{ paddingRight: 8 }}
+        />
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            color: "#104e54",
+            flexWrap: "wrap",
+            flex: 1,
+          }}
+        >
+          {updateItem.description.charAt(0).toUpperCase() +
+            updateItem.description.slice(1)}
+        </Text>
+      </View>
+    ) : (
+      ""
+    )}
+    {updateItem.created ? (
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Ionicons
+          name={"time"}
+          size={30}
+          color="#104e54"
+          style={{ paddingRight: 8 }}
+        />
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            color: "#104e54",
+            flexWrap: "wrap",
+            flex: 1,
+          }}
+        >
+          {updateItem.created}
+        </Text>
+      </View>
+    ) : (
+      ""
+    )}
+  </View>)
+
   return (
     <View style={{ flex: 1, backgroundColor: "#d1e6f0" }}>
       <Modal
@@ -124,152 +181,52 @@ function FullImg({ route }) {
         }}
         onSwipeDown={toggleModal}
       />
-      <Modal visible={info} statusBarTranslucent={true} animationType="slide">
-        <ScrollView
-          contentContainerStyle={{ backgroundColor: "#d1e6f0", padding: "6%"}}
-        >
-          <Text style={{fontSize: 25, fontWeight: "bold", alignSelf: "center", marginTop: 30}}>Image Details</Text>
-          <View
-            style={{
-              backgroundColor: "#508e9477",
-              borderRadius: 35,
-              padding: 25,
-              marginVertical: "5%"
-            }}
+      <Modal
+        visible={info}
+        statusBarTranslucent={true}
+        animationType="slide"
+        style={{ backgroundColor: "#f00" }}
+      >
+        <View style={{ height: "100%", backgroundColor: "#d1e6f0" }}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ padding: "6%" }}
           >
-            {updateItem.description ? (
-              <View style={{ flexDirection: "row", marginBottom: 18 }}>
-                <Ionicons
-                  name={"document-text"}
-                  size={30}
-                  color="#104e54"
-                  style={{ paddingRight: 8 }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
-                  {updateItem.description.charAt(0).toUpperCase() +
-                    updateItem.description.slice(1)}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
-            {updateItem.created ? (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons
-                  name={"time"}
-                  size={30}
-                  color="#104e54"
-                  style={{ paddingRight: 8 }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
-                  {updateItem.created}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
-          </View>
-          <View
-            style={{
-              backgroundColor: "#508e9477",
-              borderRadius: 35,
-              padding: 25,
-              marginVertical: "5%"
-            }}
-          >
-            {updateItem.description ? (
-              <View style={{ flexDirection: "row", marginBottom: 18 }}>
-                <Ionicons
-                  name={"document-text"}
-                  size={30}
-                  color="#104e54"
-                  style={{ paddingRight: 8 }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
-                  {updateItem.description.charAt(0).toUpperCase() +
-                    updateItem.description.slice(1)}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
-            {updateItem.created ? (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons
-                  name={"time"}
-                  size={30}
-                  color="#104e54"
-                  style={{ paddingRight: 8 }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
-                  {updateItem.created}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
-          </View>
-          <View
-            style={{
-              backgroundColor: "#508e9477",
-              borderRadius: 35,
-              padding: 25,
-              marginVertical: "5%"
-            }}
-          >
-            {updateItem.description ? (
-              <View style={{ flexDirection: "row", marginBottom: 18 }}>
-                <Ionicons
-                  name={"document-text"}
-                  size={30}
-                  color="#104e54"
-                  style={{ paddingRight: 8 }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
-                  {updateItem.description.charAt(0).toUpperCase() +
-                    updateItem.description.slice(1)}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
-            {updateItem.created ? (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Ionicons
-                  name={"time"}
-                  size={30}
-                  color="#104e54"
-                  style={{ paddingRight: 8 }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
-                  {updateItem.created}
-                </Text>
-              </View>
-            ) : (
-              ""
-            )}
-          </View>
-          <Map
-            style={{ marginVertical: "5%" }}
-            latitude={updateItem.latitude}
-            longitude={updateItem.longitude}
-          />
-        </ScrollView>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: "bold",
+                alignSelf: "center",
+                marginVertical: 30,
+              }}
+            >
+              Image Details
+            </Text>
+            {infoContainer}
+            {infoContainer}
+            {infoContainer}
+            <Map
+              style={{ marginVertical: "5%" }}
+              latitude={updateItem.latitude}
+              longitude={updateItem.longitude}
+            />
+          </ScrollView>
+        </View>
         <Pressable
-            onPress={showInfo}
-            style={{
-              alignSelf: "center",
-              backgroundColor: "#12b2e3",
-              paddingHorizontal: 25,
-              paddingVertical: 10,
-              borderRadius: 50,
-              marginVertical: 20,
-              position: "absolute",
-              bottom: 0
-            }}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold" }}>Close</Text>
-          </Pressable>
+          onPress={showInfo}
+          style={{
+            alignSelf: "center",
+            backgroundColor: "#12b2e3",
+            paddingHorizontal: 25,
+            paddingVertical: 10,
+            borderRadius: 50,
+            marginVertical: 20,
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <Text style={{ fontSize: 25, fontWeight: "bold" }}>Close</Text>
+        </Pressable>
       </Modal>
       <View style={styles.buttonRow}>
         <Pressable

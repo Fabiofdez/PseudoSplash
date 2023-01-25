@@ -48,7 +48,11 @@ function InAppContainer() {
               ),
             })}
           />
-          <Stack.Screen name="Favorites" component={Favorites} options={{animation: "fade_from_bottom"}}/>
+          <Stack.Screen
+            name="Favorites"
+            component={Favorites}
+            options={{ animation: "fade_from_bottom" }}
+          />
           <Stack.Screen
             name="FullImg"
             component={FullImg}
