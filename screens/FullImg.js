@@ -1,5 +1,12 @@
-import { useState, useEffect, useReducer } from "react";
-import { Text, View, StyleSheet, Modal, Pressable } from "react-native";
+import { useState, useEffect } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import ImageViewer from "react-native-image-zoom-viewer";
 import moment from "moment/moment";
@@ -7,7 +14,7 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
-import MapView, { Marker } from "react-native-maps";
+import Map from "../components/Map.js";
 
 function FullImg({ route }) {
   const { item, urls, data } = route.params;
@@ -81,7 +88,6 @@ function FullImg({ route }) {
   };
 
   const showInfo = () => {
-    console.log(updateItem.created, updateItem.updated);
     setInfo(!info);
   };
 
@@ -104,77 +110,6 @@ function FullImg({ route }) {
           onClick={toggleModal}
         />
       </Modal>
-      <Modal
-        visible={info}
-        statusBarTranslucent={true}
-        presentationStyle="fullScreen"
-        animationType="slide"
-        style={{ justifyContent: "center" }}
-      >
-        <Text style={{ fontSize: 15, color: "#12b2e3dd" }}>
-          {updateItem.description
-            ? "Description: " + updateItem.description
-            : ""}
-          {updateItem.created ? "\nCreated: " + updateItem.created : ""}
-          {updateItem.updated ? "\nUpdated: " + updateItem.updated : ""}
-          {updateItem.tags ? "\nTags: " + updateItem.tags : ""}
-        </Text>
-        <View
-          style={{
-            opacity: updateItem.latitude !== 1 ? 100 : 0,
-            borderRadius: 25,
-            overflow: "hidden",
-            margin: "5%",
-          }}
-        >
-          <MapView
-            style={{
-              height: undefined,
-              width: "100%",
-              aspectRatio: 1,
-              alignSelf: "center",
-            }}
-            initialRegion={{
-              latitude: updateItem.latitude,
-              longitude: updateItem.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            <Marker
-              coordinate={{
-                latitude: updateItem.latitude,
-                longitude: updateItem.longitude,
-              }}
-              title={updateItem.title}
-            >
-              <Ionicons
-                style={{
-                  opacity:
-                    updateItem.latitude === 1 && updateItem.longitude === 1
-                      ? 0
-                      : 100,
-                }}
-                name="location-sharp"
-                size={50}
-                color="#256"
-              />
-            </Marker>
-          </MapView>
-        </View>
-        <Pressable
-          onPress={showInfo}
-          style={{
-            backgroundColor: "#12b2e3dd",
-            padding: 10,
-            borderRadius: 10,
-            alignSelf: "flex-end",
-            margin: 50,
-          }}
-        >
-          <Text>Close</Text>
-        </Pressable>
-      </Modal>
       <ImageViewer
         imageUrls={urls}
         renderIndicator={() => {}}
@@ -189,6 +124,153 @@ function FullImg({ route }) {
         }}
         onSwipeDown={toggleModal}
       />
+      <Modal visible={info} statusBarTranslucent={true} animationType="slide">
+        <ScrollView
+          contentContainerStyle={{ backgroundColor: "#d1e6f0", padding: "6%"}}
+        >
+          <Text style={{fontSize: 25, fontWeight: "bold", alignSelf: "center", marginTop: 30}}>Image Details</Text>
+          <View
+            style={{
+              backgroundColor: "#508e9477",
+              borderRadius: 35,
+              padding: 25,
+              marginVertical: "5%"
+            }}
+          >
+            {updateItem.description ? (
+              <View style={{ flexDirection: "row", marginBottom: 18 }}>
+                <Ionicons
+                  name={"document-text"}
+                  size={30}
+                  color="#104e54"
+                  style={{ paddingRight: 8 }}
+                />
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
+                  {updateItem.description.charAt(0).toUpperCase() +
+                    updateItem.description.slice(1)}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+            {updateItem.created ? (
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons
+                  name={"time"}
+                  size={30}
+                  color="#104e54"
+                  style={{ paddingRight: 8 }}
+                />
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
+                  {updateItem.created}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+          </View>
+          <View
+            style={{
+              backgroundColor: "#508e9477",
+              borderRadius: 35,
+              padding: 25,
+              marginVertical: "5%"
+            }}
+          >
+            {updateItem.description ? (
+              <View style={{ flexDirection: "row", marginBottom: 18 }}>
+                <Ionicons
+                  name={"document-text"}
+                  size={30}
+                  color="#104e54"
+                  style={{ paddingRight: 8 }}
+                />
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
+                  {updateItem.description.charAt(0).toUpperCase() +
+                    updateItem.description.slice(1)}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+            {updateItem.created ? (
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons
+                  name={"time"}
+                  size={30}
+                  color="#104e54"
+                  style={{ paddingRight: 8 }}
+                />
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
+                  {updateItem.created}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+          </View>
+          <View
+            style={{
+              backgroundColor: "#508e9477",
+              borderRadius: 35,
+              padding: 25,
+              marginVertical: "5%"
+            }}
+          >
+            {updateItem.description ? (
+              <View style={{ flexDirection: "row", marginBottom: 18 }}>
+                <Ionicons
+                  name={"document-text"}
+                  size={30}
+                  color="#104e54"
+                  style={{ paddingRight: 8 }}
+                />
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
+                  {updateItem.description.charAt(0).toUpperCase() +
+                    updateItem.description.slice(1)}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+            {updateItem.created ? (
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons
+                  name={"time"}
+                  size={30}
+                  color="#104e54"
+                  style={{ paddingRight: 8 }}
+                />
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#104e54", flexWrap: "wrap", flex: 1 }}>
+                  {updateItem.created}
+                </Text>
+              </View>
+            ) : (
+              ""
+            )}
+          </View>
+          <Map
+            style={{ marginVertical: "5%" }}
+            latitude={updateItem.latitude}
+            longitude={updateItem.longitude}
+          />
+        </ScrollView>
+        <Pressable
+            onPress={showInfo}
+            style={{
+              alignSelf: "center",
+              backgroundColor: "#12b2e3",
+              paddingHorizontal: 25,
+              paddingVertical: 10,
+              borderRadius: 50,
+              marginVertical: 20,
+              position: "absolute",
+              bottom: 0
+            }}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold" }}>Close</Text>
+          </Pressable>
+      </Modal>
       <View style={styles.buttonRow}>
         <Pressable
           style={[styles.button, { backgroundColor: "#4e8291" }]}

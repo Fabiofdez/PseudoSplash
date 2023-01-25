@@ -37,17 +37,16 @@ function Home({ navigation }) {
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
-      latitude: item.location.position.latitude || 1,
-      longitude: item.location.position.longitude || 1,
+      latitude: item.location.position.latitude,
+      longitude: item.location.position.longitude,
       created: new Date(item.created_at).toUTCString(),
-      tags: item.tags,
       updated: new Date(item.updated_at).toUTCString(),
       description: item.alt_description,
     };
   };
 
   const makeSelection = async (val) => {
-    imgList.current.scrollToOffset({animated: false, offset: 0});
+    imgList.current.scrollToOffset({ animated: false, offset: 0 });
     if (selected === val) {
       setSelected("");
       setData([...oldData]);
@@ -68,7 +67,7 @@ function Home({ navigation }) {
   };
 
   const fetch = async (val, renew) => {
-    renew ? setData([]) : setData(data); 
+    renew ? setData([]) : setData(data);
     API_URL = UNSPLASH_URL + API_ID + "&query=" + val;
     try {
       const response = await axios.get(API_URL);
