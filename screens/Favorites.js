@@ -10,9 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { RefreshControl } from "react-native";
 import { View } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import emptyFolder from "../assets/emptyFolder.png";
 
 function Favorites({ navigation }) {
@@ -62,7 +60,8 @@ function Favorites({ navigation }) {
         keyExtractor={(item) => item.id}
         numColumns={2}
         extraData={data}
-        contentContainerStyle={{ paddingVertical: 7 }}
+        contentContainerStyle={{ paddingVertical: "2%" }}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <Pressable
             onPress={() =>
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     marginTop: "-7%",
     height: "100%",
     width: "100%",
-    backgroundColor: "#f5fcff",
+    backgroundColor: "#e8fcff",
     alignItems: "center",
   },
   item: {
@@ -106,11 +105,10 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   emptyText: {
-    color: "#57728d",
+    color: "#508e9487",
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 25,
-    opacity: 0.4,
   },
 });
 

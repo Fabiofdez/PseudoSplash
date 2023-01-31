@@ -11,11 +11,7 @@ export default class TagBar extends Component {
     return (
       <View style={styles.container} height={this.props.height || "7%"}>
         <View style={styles.tagBar}>
-          <ScrollView
-            style={{ backgroundColor: "#d1e6f0" }}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <Tag
               label="Nature"
               onPress={() => this.props.select("Nature")}
@@ -56,12 +52,12 @@ export default class TagBar extends Component {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    backgroundColor: "#d1e6f0",
+    backgroundColor: "#c3eaf1",
     paddingHorizontal: 6,
   },
   tagBar: {
     height: "100%",
-    borderColor: "#d1e6f0",
+    borderColor: "#c3eaf1",
     borderWidth: 10,
     borderRadius: 100,
     overflow: "hidden",

@@ -6,6 +6,7 @@ import {
   Modal,
   Pressable,
   ScrollView,
+  Image,
 } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import ImageViewer from "react-native-image-zoom-viewer";
@@ -15,6 +16,7 @@ import * as MediaLibrary from "expo-media-library";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import Map from "../components/Map.js";
+import InfoContainer from "../components/InfoContainer.js";
 
 function FullImg({ route }) {
   const { item, urls, data } = route.params;
@@ -23,6 +25,10 @@ function FullImg({ route }) {
   const [updateItem, setUpdateItem] = useState(item);
   const [info, setInfo] = useState(false);
   const toast = useToast();
+  const location =
+    (updateItem.city ? updateItem.city + ", " : "") +
+    (updateItem.country ? updateItem.country : "");
+
   let favData = [];
 
   useEffect(() => {
@@ -91,86 +97,30 @@ function FullImg({ route }) {
     setInfo(!info);
   };
 
-  const infoContainer = (<View
-    style={{
-      backgroundColor: "#508e9477",
-      borderRadius: 35,
-      padding: 25,
-      marginBottom: "5%",
-    }}
-  >
-    {updateItem.description ? (
-      <View style={{ flexDirection: "row", marginBottom: 18 }}>
-        <Ionicons
-          name={"document-text"}
-          size={30}
-          color="#104e54"
-          style={{ paddingRight: 8 }}
-        />
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "bold",
-            color: "#104e54",
-            flexWrap: "wrap",
-            flex: 1,
-          }}
-        >
-          {updateItem.description.charAt(0).toUpperCase() +
-            updateItem.description.slice(1)}
-        </Text>
-      </View>
-    ) : (
-      ""
-    )}
-    {updateItem.created ? (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Ionicons
-          name={"time"}
-          size={30}
-          color="#104e54"
-          style={{ paddingRight: 8 }}
-        />
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "bold",
-            color: "#104e54",
-            flexWrap: "wrap",
-            flex: 1,
-          }}
-        >
-          {updateItem.created}
-        </Text>
-      </View>
-    ) : (
-      ""
-    )}
-  </View>)
-
   return (
-    <View style={{ flex: 1, backgroundColor: "#d1e6f0" }}>
+    <View style={{ flex: 1, backgroundColor: "#c3eaf1" }}>
       <Modal
         visible={modalState}
         statusBarTranslucent={true}
-        presentationStyle="fullScreen"
         animationType="fade"
-        style={{ justifyContent: "center" }}
-        searchPlaceholder="Categories"
+        style={{ justifyContent: "center", height: "100%" }}
+        transparent={true}
       >
-        <ImageViewer
-          imageUrls={urls}
-          renderIndicator={() => {}}
-          backgroundColor="#606566"
-          index={itemIndex(updateItem)}
-          saveToLocalByLongPress={false}
-          onClick={toggleModal}
-        />
+        <View style={{ backgroundColor: "#152527e5", height: "100%" }}>
+          <ImageViewer
+            imageUrls={[urls[itemIndex(updateItem)]]}
+            renderIndicator={() => {}}
+            backgroundColor="#40556000"
+            saveToLocalByLongPress={false}
+            onClick={toggleModal}
+            style={{ justifyContent: "center" }}
+          />
+        </View>
       </Modal>
       <ImageViewer
         imageUrls={urls}
         renderIndicator={() => {}}
-        backgroundColor="#f5fcff"
+        backgroundColor="#e8fcff"
         saveToLocalByLongPress={false}
         onClick={toggleModal}
         index={itemIndex(item)}
@@ -179,7 +129,6 @@ function FullImg({ route }) {
           setUpdateItem(data[index]);
           await retrieve();
         }}
-        onSwipeDown={toggleModal}
       />
       <Modal
         visible={info}
@@ -187,42 +136,58 @@ function FullImg({ route }) {
         animationType="slide"
         style={{ backgroundColor: "#f00" }}
       >
-        <View style={{ height: "100%", backgroundColor: "#d1e6f0" }}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ padding: "6%" }}
+        <View style={{ backgroundColor: "#c3eaf1", height: "100%" }}>
+          <View
+            style={{
+              height: "85%",
+              borderRadius: 25,
+              margin: "6%",
+              overflow: "hidden",
+            }}
           >
-            <Text
-              style={{
-                fontSize: 25,
-                fontWeight: "bold",
-                alignSelf: "center",
-                marginVertical: 30,
-              }}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: "25%" }}
             >
-              Image Details
-            </Text>
-            {infoContainer}
-            {infoContainer}
-            {infoContainer}
-            <Map
-              style={{ marginVertical: "5%" }}
-              latitude={updateItem.latitude}
-              longitude={updateItem.longitude}
-            />
-          </ScrollView>
+              <Text
+                style={{
+                  fontSize: 25,
+                  fontWeight: "bold",
+                  color: "#104e54",
+                  alignSelf: "center",
+                  marginVertical: 30,
+                }}
+              >
+                Image Details
+              </Text>
+              <InfoContainer
+                author={updateItem.author}
+                description={updateItem.description}
+                created={updateItem.created}
+                dimensions={updateItem.dimensions}
+                exif={updateItem.exif}
+                location={location}
+              />
+              <Map
+                style={{ marginVertical: "5%" }}
+                latitude={updateItem.latitude}
+                longitude={updateItem.longitude}
+                url={updateItem.img}
+              />
+            </ScrollView>
+          </View>
         </View>
         <Pressable
           onPress={showInfo}
           style={{
             alignSelf: "center",
-            backgroundColor: "#12b2e3",
+            backgroundColor: "#108e87aa",
             paddingHorizontal: 25,
             paddingVertical: 10,
             borderRadius: 50,
             marginVertical: 20,
             position: "absolute",
-            bottom: 0,
+            bottom: 5,
           }}
         >
           <Text style={{ fontSize: 25, fontWeight: "bold" }}>Close</Text>
@@ -230,23 +195,23 @@ function FullImg({ route }) {
       </Modal>
       <View style={styles.buttonRow}>
         <Pressable
-          style={[styles.button, { backgroundColor: "#4e8291" }]}
+          style={[styles.button, { backgroundColor: "#108e87aa" }]}
           onPress={handleDownload}
         >
           <Text style={[styles.buttonText]}>Download</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.button, { backgroundColor: "#108e87aa" }]}
+          onPress={showInfo}
+        >
+          <Text style={styles.buttonText}>Details</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={handleFavorite}>
           <Ionicons
             name={favorite ? "star" : "star-outline"}
             size={30}
-            color="#506475"
+            color="#104e54dd"
           />
-        </Pressable>
-        <Pressable
-          style={[styles.button, { backgroundColor: "#4e8291" }]}
-          onPress={showInfo}
-        >
-          <Text style={styles.buttonText}>More Info</Text>
         </Pressable>
       </View>
       <Text style={styles.info}>Photographer: {updateItem.author}</Text>
@@ -257,27 +222,28 @@ function FullImg({ route }) {
 const styles = StyleSheet.create({
   info: {
     fontSize: 18,
-    color: "#798d94",
+    color: "#106e74a6",
     margin: 15,
     alignSelf: "center",
   },
   buttonRow: {
-    paddingHorizontal: 30,
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignContent: "space-between",
-    width: "100%",
+    paddingHorizontal: 30,
+    paddingVertical: 15,
   },
   button: {
-    marginVertical: 10,
     borderRadius: 50,
     alignSelf: "center",
-    padding: 15,
+    padding: 8,
+    margin: 5,
   },
   buttonText: {
     fontSize: 20,
     fontWeight: "bold",
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     borderRadius: 50,
   },
 });

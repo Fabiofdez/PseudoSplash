@@ -8,9 +8,9 @@ export default class Tag extends Component {
 
   render() {
     const active = this.props.isActive;
-    const fillColor = active ? "#5ebbc4" : "#d1e6f0";
-    const borderColor = active ? "#5ebbc4" : "#508e94";
-    const labelColor = active ? "#000" : "#408086";
+    const fillColor = active ? "#5ecac0" : "#00000000";
+    const borderColor = active ? "#5ecac0" : "#106e74dd";
+    const labelColor = active ? "#000" : "#106e74";
     return (
       <Pressable
         style={[
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
   tag: {
     flex: 2,
     borderRadius: 100,
-    borderColor: "#508e94",
     borderWidth: 2.5,
     justifyContent: "center",
     marginHorizontal: 3,

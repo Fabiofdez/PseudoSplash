@@ -25,7 +25,7 @@ function InAppContainer() {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: "#d1e6f0" },
+            headerStyle: { backgroundColor: "#c3eaf1" },
             headerTitleAlign: "center",
             headerTitleStyle: styles.headerText,
             headerShadowVisible: false,
@@ -43,7 +43,7 @@ function InAppContainer() {
                     navigation.navigate("Favorites");
                   }}
                 >
-                  <Ionicons name="star" size={25} color="#506475" />
+                  <Ionicons name="star" size={25} color="#104e54" />
                 </Pressable>
               ),
             })}
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#506475",
+    color: "#104e54",
   },
 });
 

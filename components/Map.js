@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import { Component } from "react";
@@ -18,13 +18,15 @@ export default class renderMap extends Component {
     if (renderMap) {
       map = (
         <View
-          style={{
-            borderRadius: 35,
-            overflow: "hidden",
-            borderWidth: 15,
-            borderColor: "#508e9477",
-            margin: this.props.style.margin,
-          }}
+          style={[
+            this.props.style,
+            {
+              borderRadius: 35,
+              overflow: "hidden",
+              borderWidth: 15,
+              borderColor: "#508e9477",
+            },
+          ]}
         >
           <MapView
             style={{
@@ -46,11 +48,36 @@ export default class renderMap extends Component {
                 longitude: this.props.longitude,
               }}
             >
-              <Ionicons
-                name="location-sharp"
-                size={50}
-                color={this.props.pinColor}
-              />
+              <View
+                style={{
+                  alignItems: "center",
+                  shadowColor: "black",
+                  shadowOpacity: 0.26,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowRadius: 10,
+                  elevation: 3,
+                }}
+              >
+                <Ionicons
+                  name="location-sharp"
+                  size={80}
+                  color="#fff"
+                />
+                <Image
+                  source={{ uri: this.props.url }}
+                  style={{
+                    borderRadius: 50,
+                    width: "80%",
+                    height: undefined,
+                    aspectRatio: 1,
+                    overflow: "hidden",
+                    flex: 1,
+                    borderColor: "#fff",
+                    borderWidth: 5,
+                    position: "absolute",
+                  }}
+                />
+              </View>
             </Marker>
           </MapView>
         </View>

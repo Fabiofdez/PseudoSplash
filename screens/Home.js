@@ -37,11 +37,13 @@ function Home({ navigation }) {
       img: item.urls.regular,
       author: item.user.name,
       download: item.links.download,
+      city: item.location.city,
+      country: item.location.country,
       latitude: item.location.position.latitude,
       longitude: item.location.position.longitude,
       created: new Date(item.created_at).toUTCString(),
-      updated: new Date(item.updated_at).toUTCString(),
       description: item.alt_description,
+      exif: item.exif,
     };
   };
 
@@ -114,7 +116,7 @@ function Home({ navigation }) {
         inputStyle={{ color: "#104e54", fontSize: 21 }}
         placeholderTextColor="#104e54"
         placeholder="Search images..."
-        cursorColor="#306e74"
+        cursorColor="#308e94"
         onChangeText={setQuery}
         onSubmitEditing={() => handleSearch(query)}
         value={query}
@@ -128,6 +130,7 @@ function Home({ navigation }) {
         extraData={data}
         onEndReached={updateData}
         contentContainerStyle={{ paddingVertical: "2%" }}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <Pressable
             onPress={() =>
@@ -153,7 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    backgroundColor: "#f5fcff",
+    backgroundColor: "#e8fcff",
     alignItems: "center",
   },
   item: {
@@ -167,13 +170,13 @@ const styles = StyleSheet.create({
   searchContainer: {
     alignContent: "center",
     width: "100%",
-    backgroundColor: "#d1e6f0",
+    backgroundColor: "#c3eaf1",
     borderBottomWidth: 0,
     borderTopWidth: 0,
   },
   searchInput: {
     position: "relative",
-    backgroundColor: "#508e9469",
+    backgroundColor: "#508e9477",
     borderRadius: 50,
     paddingHorizontal: 10,
     marginHorizontal: 10,
